@@ -1,0 +1,222 @@
+html {
+	height: 100%;
+}
+body {
+	min-height: 100%;
+}
+.root {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background-image: url(../assets/bg.jpg);
+	max-height: 100vh;
+}
+.main {
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: auto;
+	margin-top: 8;
+	margin-bottom: 2;
+	max-height: 90vh;
+}
+.menu {
+	width: 90%;
+	padding: 1%;
+	margin: 1%;
+}
+.menu-panel {
+	opacity: 90%;
+	min-width: 30%;
+	border-radius: 10px;
+	box-shadow: black;
+	margin: 1%;
+	padding: 2.5%
+}
+#left-panel {
+	flex-grow: 2;
+	flex-shrink: 1;
+}
+#rigth-panel {
+	flex-grow: 1;
+	flex-shrink: 2;
+}
+.nav {
+	text-decoration: none;
+	padding: 10px;
+}
+.footer {
+	padding-top: 2%;
+	padding-bottom: 2%;
+	margin-top: 'auto';
+	background-color: rosybrown;
+	opacity: 60%;
+}
+.form-element {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 40px;
+	justify-content: right;
+}
+.form-text {
+	font-size: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-right: 1%;
+	
+}
+.icon {
+	/* max-height: 1%; */
+	max-width: 15%;
+}
+.avatar {
+	border-radius: 50%;
+	border-style: solid;
+	padding: 2%;
+	margin: 4%;
+	
+}
+.arrow {
+	max-width: 15%;
+	max-height: 30%;
+	top: 50%;
+}
+.room {
+	margin: 0 1%;
+}
+.room-game {
+	flex-grow: 3;
+	flex-shrink: 1;
+	/* background-color: crimson; */
+}
+.room-chat {
+	flex-grow: 1;
+	flex-shrink: 2;
+	border-radius: 10px;
+	margin: .3%;
+	max-height: 90vh;
+	opacity: 95%;
+}
+.game-table {
+	flex-grow: 5;
+	margin: 1%;
+	background-color: burlywood;
+	background-image: url('../assets/wood.jpg');
+}
+.table {
+	max-height: 50%;
+	max-width: 60%;
+	margin: 1%
+}
+.game-console {
+	flex-grow: 2;
+	max-height: 30%;
+	/* max-width: 90%; */
+	/* background-color: darkorange; */
+}
+.game-log {
+	flex-grow: 3;
+	flex-shrink: 1;
+	overflow: auto;
+	scrollbar-width: 0;
+	margin: 1%;
+}
+.game-log:hover {
+	overflow: auto;
+}
+.warning-log {
+	color: red;
+}
+.info-log {
+	color: rgb(161, 161, 21);
+}
+.game-vote {
+	flex-grow: 1;
+	flex-shrink: 2;
+	margin: 1%;
+}
+.chat-box {
+	overflow: auto;
+	flex-grow: 10;
+	max-height: 90%;
+	padding: 10% 13%;
+}
+.chat-box:hover {
+	overflow: auto;
+}
+.chat-bar {
+	padding-top: 2%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 4%;
+}
+.chat-balloon {
+	margin: 1%;
+	padding: 2%;
+	border-radius: 2px;
+	max-width: 70%;
+}
+.mine {
+	background-color: lawngreen;
+}
+.others {
+	background-color: lightblue;
+}
+input {
+	outline: 0;
+	border-width: 0 0 2px;
+	border-color: grey;
+}
+input:focus {
+	/* outline: none; */
+	border-color: rgb(51, 170, 206);
+}
+button {
+	border: 0;
+	background-color: inherit;
+}
+link {
+
+}
+::-webkit-scrollbar-track {
+	background: white;
+}
+::-webkit-scrollbar-track-piece {
+	background-color: white;
+}
+
+.fc {
+	display: flex;
+	flex-direction: column;
+}
+.fr {
+	display: flex;
+	flex-direction: row;
+}
+.c-container {
+	justify-content: center;
+}
+.c-item {
+	align-self: center;
+}
+.bg-white {
+	background-color: white;
+}
+.bg-grey {
+	background-color: grey;
+}
+.bg-red {
+	background-color: red;
+}
+.bg-blue {
+	background-color: blue;
+}
+.v-center {
+	margin: 0;
+	/* position: absolute; */
+	/* top: -50%; */
+	-ms-transform: translateY(50%);
+	transform: translateY(50%);
+}
+#avatar-choice {
+	align-items: baseline;
+}

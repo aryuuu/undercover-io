@@ -86,10 +86,12 @@ body {
 #room {
 	margin: 0 1%;
 }
+#return-button {
+	max-width: 3%;
+}
 #room-game {
 	flex-grow: 3;
 	flex-shrink: 1;
-	/* background-color: crimson; */
 }
 #room-chat {
 	padding: 1.5%;
@@ -104,7 +106,7 @@ body {
 	padding: 1%;
 	flex-grow: 5;
 	margin: 1%;
-	background-color: burlywood;
+	background-color: #D0B092;
 	/* background-image: url('../assets/wood.jpg'); */
 }
 #table {
@@ -127,14 +129,13 @@ body {
 	scrollbar-width: 0;
 	margin: 1%;
 }
-#game-log:hover {
-	overflow: auto;
-}
 .warning-log {
-	color: red;
+	font-size: 14px;
+	color: #C03D29;
 }
 .info-log {
-	color: rgb(161, 161, 21);
+	font-size: 14px;
+	color: #1F1F29;
 }
 #game-word { 
 	flex-grow: 1;
@@ -152,25 +153,37 @@ body {
 	overflow: auto;
 	flex-grow: 10;
 	max-height: 90%;
-	padding: 10% 13%;
+	padding: 5% 5%;
 }
 #chat-box:hover {
 	overflow: auto;
 }
 #chat-bar {
 	padding-top: 2%;
+	margin-top: 15px;
 	margin-left: 5%;
 	margin-right: 5%;
 	margin-bottom: 4%;
 }
+.chat-user {
+	font-size: 14px;
+	margin-top: 5px;
+	margin-bottom: 2px;
+}
+.chat-content {
+	font-size: 12px;
+	color: grey;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
 .chat-balloon {
-	margin: 1%;
-	padding: 2%;
-	border-radius: 2px;
-	max-width: 70%;
+	margin: 5px;
+	padding: 2px;
+	border-radius: 6px;
+	max-width: 90%;
 }
 .mine {
-	background-color: lawngreen;
+	background-color: #a5ef7f;
 }
 .others {
 	background-color: lightblue;

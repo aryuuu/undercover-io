@@ -54,11 +54,11 @@ const Home = (props: Props) => {
 							<input type="text" placeholder="XxXPussySlayer_69XxX"/>
 						</div>
 						<div className="fr c-container">
-							<Link to="/room" className="nav" onClick={createRoom}  >Create</Link>
-							<Link to="/room/1" className="nav" onClick={showLoading} >Join</Link>
+							<Link to="/room/1342384" className="nav" onClick={createRoom}  >Create</Link>
+							<Link to="/room/13254477" className="nav" onClick={showLoading} >Join</Link>
 						</div>
 					</div>
-					<div id="right-panel" className="menu-panel fc bg-white">
+					<div id="right-panel" className="menu-panel fc c-container bg-white">
 						<div className="fc c-container c-item">
 							<h1>Login using google</h1>
 							<FcGoogle size="5em" className="c-item" />
@@ -66,7 +66,6 @@ const Home = (props: Props) => {
 					</div>
 				</div>				
 			</div>
-
 			{/* footer */}
 			<Footer/>
 		</div>

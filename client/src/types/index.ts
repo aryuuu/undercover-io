@@ -1,13 +1,13 @@
 export interface Chat {
   sender: string,
   content: string,
-  timestamp: Date
+  timestamp: number
 }
 
 export interface Log {
-  status: string;
+  type: string;
   content: string;
-  timestamp: Date;
+  timestamp: number;
 }
 
 export interface Player {

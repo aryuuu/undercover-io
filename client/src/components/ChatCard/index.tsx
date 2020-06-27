@@ -10,9 +10,9 @@ const ChatCard = (props: Prop) => {
   const { chat } = props;
   const renderChat = chat.map((item: Chat, index: number) => {
     return (
-      <div key={`chat-${index}`} className="" >
-        <p className="" >{item.sender}</p>
-        <p className="" >{item.content}</p>
+      <div key={`chat-${index}`} className="chat-balloon mine" >
+        <p className="chat-user" >{item.sender}</p>
+        <p className="chat-content" >{item.content}</p>
       </div>
     );
   });

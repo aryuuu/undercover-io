@@ -12,7 +12,7 @@ const LogCard = (props: Prop) => {
   const renderLog = log.map((item: Log, index: number) => {
     return (
       <div key={`log-${index}`}>
-        <p className={``}>item.content</p>
+        <p className={`${item.type}-log`}>{item.content}</p>
       </div>
     );
   });

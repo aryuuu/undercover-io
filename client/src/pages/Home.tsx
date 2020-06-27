@@ -1,16 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+import { 
+	FaChevronLeft, 
+	FaChevronRight 
+} from 'react-icons/fa';
+import Swal from 'sweetalert2';
+import { FcGoogle } from 'react-icons/fc';
+
 /** components */
 import Footer from '../components/Footer';
-/** styles */
-import '../styles/style.css';
 /** images */
 import incognitoLogo from '../assets/incognito.svg';
-import googleIcon from '../assets/googleicon.svg';
-import leftArrow from '../assets/left-chevron.png';
-import rightArrow from '../assets/right-chevron.png';
 
-const Home = (props) => {
+interface Props {
+
+}
+
+const Home = (props: Props) => {
+
+	const createRoom = () => {
+		Swal.fire({
+			title: 'Creating your room',
+			text: 'please wait...',
+			showConfirmButton: false,
+			timer: 1500
+		})
+	}
+
+	const showLoading = () => {
+		Swal.fire({
+			title: 'Loading',
+			text: 'you will be in your room in a second',
+			showConfirmButton: false,
+			timer: 1000
+		})
+	}
+
 	return (
 		<div className="root">
 			{/* menu */}
@@ -18,23 +45,23 @@ const Home = (props) => {
 				<div className="menu fr c-container">
 					<div id="left-panel" className="menu-panel fc c-container bg-white">
 						<div id="avatar-choice" className="fr c-container">
-							<img className="arrow c-item" src={leftArrow} alt="left arrow"/>
+							<FaChevronLeft size="4em" className="c-item"/>
 							<img className="icon avatar c-item" src={incognitoLogo} alt="avatar"/>
-							<img className="arrow c-item" src={rightArrow} alt="right arrow"/>
+							<FaChevronRight size="4em" className="c-item"/>
 						</div>
 						<div className="form-element c-container">
 							<p className="form-text">Nickname</p>
 							<input type="text" placeholder="XxXPussySlayer_69XxX"/>
 						</div>
 						<div className="fr c-container">
-							<Link to="/room" className="nav">Create</Link>
-							<Link to="/room" className="nav">Join</Link>
+							<Link to="/room" className="nav" onClick={createRoom}  >Create</Link>
+							<Link to="/room/1" className="nav" onClick={showLoading} >Join</Link>
 						</div>
 					</div>
 					<div id="right-panel" className="menu-panel fc bg-white">
 						<div className="fc c-container c-item">
 							<h1>Login using google</h1>
-							<img className="icon c-item" src={googleIcon} alt="google icon"/>
+							<FcGoogle size="5em" className="c-item" />
 						</div>
 					</div>
 				</div>				

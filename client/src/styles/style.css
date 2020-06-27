@@ -41,10 +41,13 @@ body {
 	flex-shrink: 2;
 }
 .nav {
+	color: black;
 	text-decoration: none;
 	padding: 10px;
 }
 .footer {
+	min-width: 100vw;
+	align-self: center;
 	padding-top: 2%;
 	padding-bottom: 2%;
 	margin-top: 'auto';
@@ -80,15 +83,16 @@ body {
 	max-height: 30%;
 	top: 50%;
 }
-.room {
+#room {
 	margin: 0 1%;
 }
-.room-game {
+#room-game {
 	flex-grow: 3;
 	flex-shrink: 1;
 	/* background-color: crimson; */
 }
-.room-chat {
+#room-chat {
+	padding: 1.5%;
 	flex-grow: 1;
 	flex-shrink: 2;
 	border-radius: 10px;
@@ -96,31 +100,34 @@ body {
 	max-height: 90vh;
 	opacity: 95%;
 }
-.game-table {
+#game-table {
+	padding: 1%;
 	flex-grow: 5;
 	margin: 1%;
 	background-color: burlywood;
-	background-image: url('../assets/wood.jpg');
+	/* background-image: url('../assets/wood.jpg'); */
 }
-.table {
+#table {
 	max-height: 50%;
 	max-width: 60%;
 	margin: 1%
 }
-.game-console {
+#game-console {
 	flex-grow: 2;
 	max-height: 30%;
 	/* max-width: 90%; */
 	/* background-color: darkorange; */
 }
-.game-log {
+#game-log {
+	max-width: 50%;
+	padding: 2%;
 	flex-grow: 3;
 	flex-shrink: 1;
 	overflow: auto;
 	scrollbar-width: 0;
 	margin: 1%;
 }
-.game-log:hover {
+#game-log:hover {
 	overflow: auto;
 }
 .warning-log {
@@ -129,21 +136,28 @@ body {
 .info-log {
 	color: rgb(161, 161, 21);
 }
-.game-vote {
+#game-word { 
+	flex-grow: 1;
+	flex-shrink: 1;
+	max-width: 25%;
+	margin: 1%;
+}
+#game-vote {
+	max-width: 25%;
 	flex-grow: 1;
 	flex-shrink: 2;
 	margin: 1%;
 }
-.chat-box {
+#chat-box {
 	overflow: auto;
 	flex-grow: 10;
 	max-height: 90%;
 	padding: 10% 13%;
 }
-.chat-box:hover {
+#chat-box:hover {
 	overflow: auto;
 }
-.chat-bar {
+#chat-bar {
 	padding-top: 2%;
 	margin-left: 5%;
 	margin-right: 5%;
@@ -183,7 +197,9 @@ link {
 ::-webkit-scrollbar-track-piece {
 	background-color: white;
 }
-
+.rounded {
+	border-radius: 10px;
+}
 .fc {
 	display: flex;
 	flex-direction: column;
@@ -198,6 +214,9 @@ link {
 .c-item {
 	align-self: center;
 }
+/* .l-item {
+	
+} */
 .bg-white {
 	background-color: white;
 }
@@ -208,7 +227,10 @@ link {
 	background-color: red;
 }
 .bg-blue {
-	background-color: blue;
+	background-color: lightblue;
+}
+.transparent {
+	opacity: 90%;
 }
 .v-center {
 	margin: 0;

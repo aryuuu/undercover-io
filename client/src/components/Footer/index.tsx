@@ -1,9 +1,7 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-
-import '../styles/style.css';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 
 function Copyright() {
   return (
@@ -22,7 +20,7 @@ function Copyright() {
 const Footer = () => {
 	return (
 		<footer className="footer">
-			<Container maxWidth="sm">
+			<Container maxWidth="sm" >
 				<Copyright />
 			</Container>
 		</footer>

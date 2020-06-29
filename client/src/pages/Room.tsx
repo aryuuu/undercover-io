@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { RouteComponentProps } from 'react-router';
 import { useState, useEffect } from 'react';
+import { RouteComponentProps } from 'react-router';
 
 import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
+// import withReactContent from 'sweetalert2-react-content';
 import { Modal } from '@material-ui/core';
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -14,6 +16,8 @@ import { Log, Chat, Player } from '../types';
 import Footer from '../components/Footer';
 import LogCard from '../components/LogCard';
 import ChatCard from '../components/ChatCard';
+import PlayerCard from '../components/PlayerCard';
+import VoteCard from '../components/VoteCard';
 /** images */
 
 interface MatchParams {
@@ -21,7 +25,6 @@ interface MatchParams {
 }
 
 interface Props extends RouteComponentProps<MatchParams> {
-	
 }
 
 const Room = (props: Props) => {
@@ -71,6 +74,11 @@ const Room = (props: Props) => {
 			timestamp: Date.now()
 		},
 		{
+			sender: 'Leela',
+			content: 'maybe im too harsh on you fry',
+			timestamp: Date.now()
+		},
+		{
 			sender: 'Amy',
 			content: 'can i have my ribs now?',
 			timestamp: Date.now()
@@ -96,6 +104,11 @@ const Room = (props: Props) => {
 			timestamp: Date.now()
 		},
 		{
+			sender: 'Hermes',
+			content: 'stop it you stupid crab',
+			timestamp: Date.now()
+		},
+		{
 			sender: 'Scruffy',
 			content: 'im scruffy the janitor',
 			timestamp: Date.now()
@@ -108,6 +121,7 @@ const Room = (props: Props) => {
 	];
 	const dummyPlayer: Player[] = [
 		{
+			id: 'fry',
 			username: 'Fry',
 			score: 0,
 			avatar: 'fry-pic',
@@ -115,6 +129,7 @@ const Room = (props: Props) => {
 			isAlive: true
 		},
 		{
+			id: 'leela',
 			username: 'Leela',
 			score: 10,
 			avatar: 'Leela-pic',
@@ -122,6 +137,7 @@ const Room = (props: Props) => {
 			isAlive: true
 		},
 		{
+			id: 'bender',
 			username: 'Bender',
 			score: 10000,
 			avatar: 'bender-pic',
@@ -129,6 +145,7 @@ const Room = (props: Props) => {
 			isAlive: true
 		},
 		{
+			id: 'hubert',
 			username: 'Hubert',
 			score: 20,
 			avatar: 'hubert-pic',
@@ -136,6 +153,7 @@ const Room = (props: Props) => {
 			isAlive: false
 		},
 		{
+			id: 'amy',
 			username: 'Amy',
 			score: 30,
 			avatar: 'amy-pic',
@@ -143,6 +161,7 @@ const Room = (props: Props) => {
 			isAlive: true
 		},
 		{
+			id: 'hermes',
 			username: 'Hermes',
 			score: 0,
 			avatar: 'hermes-pic',
@@ -150,6 +169,7 @@ const Room = (props: Props) => {
 			isAlive: false
 		},
 		{
+			id: 'zoidberg',
 			username: 'Zoidberg',
 			score: 0,
 			avatar: 'zoidberg-pic',
@@ -157,6 +177,7 @@ const Room = (props: Props) => {
 			isAlive: false
 		},
 		{
+			id: 'scruffy',
 			username: 'Scruffy',
 			score: 40,
 			avatar: 'fry-pic',
@@ -165,19 +186,22 @@ const Room = (props: Props) => {
 		},
 	];
 
-
 	const [ word, setWord ] = useState('Pisang raja');
 	const [ log, setLog ] = useState(dummyLog);
 	const [ chat, setChat ] = useState(dummyChat);
 	const [ player, setPlayer ] = useState(dummyPlayer);
+	const [ voteOpen, setVoteOpen ] = useState(false);
 
-
-
+	
 	const displayWord = () => {
 		Swal.fire({
-			title: "Your word is",
+			title: 'Your word is',
 			text: word
-		})
+		});
+	};
+	// const VoteSwal = withReactContent(Swal);
+	const toggleVote = () => {
+		setVoteOpen(!voteOpen);
 	}
 
 	return (
@@ -191,6 +215,7 @@ const Room = (props: Props) => {
 				<div id="room-game" className="fc c-container">
 						<div id="game-table" className="fc c-container">
 							<h1 className="c-item">Table</h1>
+							<PlayerCard player={player}/>
 						</div>
 						<div id="game-console" className="fr c-container">
 							<div id="game-log" className="fc bg-white">
@@ -199,8 +224,13 @@ const Room = (props: Props) => {
 							<div id="game-word" className="fr bg-white c-container rounded" onClick={displayWord}>
 								<h4 className="c-item">Click to check your word</h4>
 							</div>
-							<div id="game-vote" className="fr c-container bg-white rounded">
+							<div id="game-vote" className="fr c-container bg-white rounded" onClick={toggleVote} >
 								<h1 className="c-item">Vote box</h1>
+								<Modal open={voteOpen} onClose={toggleVote}>
+									<div>
+										<VoteCard player={player}/>
+									</div>
+								</Modal>
 							</div>
 						</div>
 				</div>

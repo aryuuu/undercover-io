@@ -10,9 +10,11 @@ const VoteCard = (props: Prop) => {
   const { player } = props;
 
   const renderCandidate = player.map((item: Player, index: number) => {
-    <div key={`candidate-${index}`} className="">
-      <div>{item.username}</div>
-    </div>
+    return (
+      <div key={`candidate-${index}`} className="nothing">
+        <div>{item.username}</div>
+      </div>
+    );
   })
 
   return (

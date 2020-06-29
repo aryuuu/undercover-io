@@ -11,6 +11,7 @@ export interface Log {
 }
 
 export interface Player {
+  id: string;
   username: string;
   score: number;
   avatar: string;

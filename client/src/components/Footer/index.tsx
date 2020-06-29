@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary">
+    <Typography variant="body2" className="txt-white">
       {'Copyright © '}
       <Link color="inherit" href="https://github.com/aryuuu" target="_blank">
         M Algah Fattah Illahi

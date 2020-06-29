@@ -25,7 +25,8 @@ const Home = (props: Props) => {
 			title: 'Creating your room',
 			text: 'please wait...',
 			showConfirmButton: false,
-			timer: 1500
+			timer: 1500,
+			timerProgressBar: true,
 		})
 	}
 
@@ -34,7 +35,8 @@ const Home = (props: Props) => {
 			title: 'Loading',
 			text: 'you will be in your room in a second',
 			showConfirmButton: false,
-			timer: 1000
+			timer: 1000,
+			timerProgressBar: true
 		})
 	}
 
@@ -50,8 +52,10 @@ const Home = (props: Props) => {
 							<FaChevronRight size="4em" className="c-item"/>
 						</div>
 						<div className="form-element c-container">
-							<p className="form-text">Nickname</p>
-							<input type="text" placeholder="XxXPussySlayer_69XxX"/>
+							<form action="">
+								{/* <p className="form-text">Nickname</p> */}
+								<input type="text" placeholder="XxXPussySlayer_69XxX"/>
+							</form>
 						</div>
 						<div className="fr c-container">
 							<Link to="/room/1342384" className="nav" onClick={createRoom}  >Create</Link>

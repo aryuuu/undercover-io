@@ -31,13 +31,15 @@ const Home = (props: Prop) => {
 		})
 	}
 
-	const showLoading = () => {
-		Swal.fire({
-			title: 'Loading',
-			text: 'you will be in your room in a second',
-			showConfirmButton: false,
-			timer: 1000,
-			timerProgressBar: true
+	const joinRoom = () => {
+		swal({
+			title: 'Join room',
+			text: 'Enter room id',
+			content: (
+				<form>
+					<input type="text" placeholder="room id"/>
+				</form>
+			)
 		})
 	}
 
@@ -60,7 +62,7 @@ const Home = (props: Prop) => {
 							</div>
 							<div className="fr c-container">
 								<Link to="/room/1342384" className="nav txt-white" onClick={createRoom}  >Create</Link>
-								<Link to="/room/13254477" className="nav txt-white" onClick={showLoading} >Join</Link>
+								<Link to="/room/13254477" className="nav txt-white" onClick={joinRoom} >Join</Link>
 							</div>
 						</div>
 						<div id="right-panel" className="menu-panel fc c-container bg-raisin-black">

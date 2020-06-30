@@ -19,7 +19,10 @@ const VoteCard = (props: Prop) => {
 
   const renderCandidate = player.map((item: Player, index: number) => {
     return (
-      <div key={`candidate-${index}`} className="bg-black-olive" onClick={() => votePlayer(item)}>
+      <div key={`candidate-${index}`} 
+        className={`bg-black-olive vote-item ${item.isAlive ? '' : 'non-votable'}`} 
+        onClick={() => votePlayer(item)}
+      >
         <p className="txt-white">{item.username}</p>
       </div>
     );

@@ -243,7 +243,7 @@ const Room = (props: Props) => {
 					<div id="chat-box" className="bg-black-olive">
 						<ChatCard chat={chat}/>
 					</div>
-					<input id="chat-bar" className="bg-black-olive" placeholder="spit it out"/>
+					<input id="chat-bar" type="text" className="bg-black-olive" placeholder="spit it out"/>
 				</div>
 			</div>
 			<Footer/>

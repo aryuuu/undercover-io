@@ -54,6 +54,11 @@ body {
 	color: black;
 	text-decoration: none;
 	padding: 10px;
+	--scaler: 1;
+	transform: scale(var(--scaler));
+}
+.nav:hover {
+	--scaler: 1.1;
 }
 .footer {
 	min-width: 100vw;
@@ -117,27 +122,27 @@ body {
 	padding: 1%;
 	flex-grow: 5;
 	margin: 1%;
-	/* background-color: #D0B092; */
-	/* background-image: url('../assets/wood.jpg'); */
 }
 #table {
 	max-height: 50%;
 	max-width: 60%;
-	margin: 1%
+	margin: 1%;
+	/* transform: translate(-40px, -40px); */
 }
 .player {
 	height: 80px;
 	width: 80px;
-	/* margin: 20px; */
 	padding-bottom: 1%;
+	border: 2px;
+	border-style: solid;
 	border-radius: 50%;
-	transform: translateX(-40px) translateY(-40px) translateY(-10px);
+	--scaler: 1;
+	transform: translateX(-40px) translateY(-40px) scale(var(--scaler)) ;
 	/* transform: translateY(-40px); */
 }
-/* .player::before {
-	content: '';
-	padding-top: 100%;
-} */
+.player:hover {
+	--scaler: 1.2;
+}
 .alive {
 	margin-top: 2px;
 	margin-bottom: 2px;
@@ -176,12 +181,22 @@ body {
 	flex-shrink: 1;
 	max-width: 25%;
 	margin: 1%;
+	--scaler: 1;
+	transform: scale(var(--scaler));
+}
+#game-word:hover {
+	--scaler: 1.1;
 }
 #game-vote {
 	max-width: 25%;
 	flex-grow: 1;
 	flex-shrink: 2;
 	margin: 1%;
+	--scaler: 1;
+	transform: scale(var(--scaler));
+}
+#game-vote:hover {
+	--scaler: 1.1;
 }
 #vote-modal {
 	border-radius: 10%;
@@ -191,14 +206,20 @@ body {
 	overflow: auto;
 }
 #vote-card {
+	/* max-height: 200px; */
 	overflow: auto;
-	
+}
+.vote-item {
+	margin: 1px
+}
+.non-votable {
+	visibility: hidden;
 }
 #chat-box {
 	overflow: auto;
 	scrollbar-width: none;
 	flex-grow: 10;
-	max-height: 90%;
+	max-height: 85%;
 	padding: 5% 5%;
 }
 #chat-box:hover {
@@ -218,7 +239,6 @@ body {
 }
 .chat-content {
 	font-size: 12px;
-	/* color: grey; */
 	margin-top: 2px;
 	margin-bottom: 5px;
 }
@@ -227,6 +247,11 @@ body {
 	padding: 2px;
 	border-radius: 6px;
 	max-width: 90%;
+	--scaler: 1;
+	transform: scale(var(--scaler));
+}
+.chat-balloon:hover {
+	--scaler: 1.05;
 }
 .modal-card {
 	width: 40vh;
@@ -243,9 +268,13 @@ input {
 	border-width: 0 0 2px;
 	border-color: grey;
 }
-/* input [type="text"] {
+input[type="text"] {
+	/* border-width: 10px; */
+}
+input[type="number"] {
 	background: transparent;
-} */
+	border-width: 0 0 0 0;
+}
 input::placeholder {
 	color: white;
 }
@@ -338,6 +367,38 @@ link {
 .bg-davys-grey {
 	background-color: #525659;
 }
+/* icons bg color */
+.bg-pastel-red {
+	background-color: #FF6962;
+}
+.bg-melon {
+	background-color: #FFB6B3;
+}
+.bg-pale-pink {
+	background-color: #FFD5D4;
+}
+.bg-bright-gray {
+	background-color: #E7F1E8;
+}
+.bg-tea-green {
+	background-color: #BDE7BD;
+}
+.bg-pastel-green {
+	background-color: #77DD76;
+}
+.bg-dark-sky-blue {
+	background-color: #8bb4c7;
+}
+.bg-pastel-blue {
+	background-color: #afc7ce;
+}
+.bg-light-yellow {
+	background-color: #fffee4;
+}
+.bg-blond {
+	background-color: #f9f0bc;
+}
+
 .transparent {
 	opacity: 90%;
 }
@@ -350,4 +411,11 @@ link {
 }
 #avatar-choice {
 	align-items: baseline;
+}
+.popping {
+	--scaler: 1;
+	transform: scale(var(--scaler));
+}
+.popping:hover {
+	--scaler: 1.2;
 }

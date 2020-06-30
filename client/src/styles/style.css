@@ -1,15 +1,24 @@
 html {
 	height: 100%;
+	max-height: 100vh;
 }
 body {
 	min-height: 100%;
+	max-height: 100vh;
+	margin: 0;
 }
 .root {
+	position: relative;
+	margin: 0;
+	padding: 0;
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	background-image: url(../assets/bg.jpg);
+	/* background-image: url(../assets/bg.jpg); */
+	/* background-color: #0b1026; */
 	max-height: 100vh;
+	min-width: 100vw;
+	min-height: 100vh;
 }
 .main {
 	flex-grow: 1;
@@ -18,6 +27,7 @@ body {
 	margin-top: 8;
 	margin-bottom: 2;
 	max-height: 90vh;
+	/* min-width:  100vw; */
 }
 .menu {
 	width: 90%;
@@ -92,6 +102,7 @@ body {
 #room-game {
 	flex-grow: 3;
 	flex-shrink: 1;
+	max-width: 70%;
 }
 #room-chat {
 	padding: 1.5%;
@@ -106,7 +117,7 @@ body {
 	padding: 1%;
 	flex-grow: 5;
 	margin: 1%;
-	background-color: #D0B092;
+	/* background-color: #D0B092; */
 	/* background-image: url('../assets/wood.jpg'); */
 }
 #table {
@@ -115,14 +126,18 @@ body {
 	margin: 1%
 }
 .player {
-	height: auto;
+	height: 80px;
+	width: 80px;
+	/* margin: 20px; */
 	padding-bottom: 1%;
 	border-radius: 50%;
+	transform: translateX(-40px) translateY(-40px) translateY(-10px);
+	/* transform: translateY(-40px); */
 }
-.player::before {
+/* .player::before {
 	content: '';
 	padding-top: 100%;
-}
+} */
 .alive {
 	margin-top: 2px;
 	margin-bottom: 2px;
@@ -145,7 +160,7 @@ body {
 	flex-grow: 3;
 	flex-shrink: 1;
 	overflow: auto;
-	scrollbar-width: 0;
+	scrollbar-width: none;
 	margin: 1%;
 }
 .warning-log {
@@ -154,7 +169,7 @@ body {
 }
 .info-log {
 	font-size: 14px;
-	color: #1F1F29;
+	color: white;
 }
 #game-word { 
 	flex-grow: 1;
@@ -168,8 +183,20 @@ body {
 	flex-shrink: 2;
 	margin: 1%;
 }
+#vote-modal {
+	border-radius: 10%;
+	scrollbar-width: none;
+	height: 200px;
+	width: 200px;
+	overflow: auto;
+}
+#vote-card {
+	overflow: auto;
+	
+}
 #chat-box {
 	overflow: auto;
+	scrollbar-width: none;
 	flex-grow: 10;
 	max-height: 90%;
 	padding: 5% 5%;
@@ -191,7 +218,7 @@ body {
 }
 .chat-content {
 	font-size: 12px;
-	color: grey;
+	/* color: grey; */
 	margin-top: 2px;
 	margin-bottom: 5px;
 }
@@ -201,16 +228,26 @@ body {
 	border-radius: 6px;
 	max-width: 90%;
 }
+.modal-card {
+	width: 40vh;
+	height: 40vh;
+}
 .mine {
-	background-color: #a5ef7f;
+	/* background-color: #a5ef7f; */
 }
 .others {
-	background-color: lightblue;
+	/* background-color: lightblue; */
 }
 input {
 	outline: 0;
 	border-width: 0 0 2px;
 	border-color: grey;
+}
+/* input [type="text"] {
+	background: transparent;
+} */
+input::placeholder {
+	color: white;
 }
 input:focus {
 	/* outline: none; */
@@ -246,12 +283,34 @@ link {
 .c-item {
 	align-self: center;
 }
+/* positions */
+.con-relative {
+	position: relative;
+}
+.i-absolute {
+	position: absolute;
+}
 /* .l-item {
 
 } */
+/* colors */
+/* text */
 .txt-white {
 	color: white;
 }
+.txt-yankees-blue {
+	color: #161b36;
+}
+.txt-space-cadet {
+	color: #242b4b;
+}
+.txt-police-blue {
+	color: #35475f;
+}
+.txt-yankees-blue-too {
+	color: #102849;
+}
+/* background */
 .bg-white {
 	background-color: white;
 }
@@ -263,6 +322,21 @@ link {
 }
 .bg-blue {
 	background-color: lightblue;
+}
+.bg-yankees-blue {
+	background-color: #161b36;
+}
+.bg-rich-black {
+	background-color: #00010D;
+}
+.bg-raisin-black {
+	background-color: #212326;
+}
+.bg-black-olive {
+	background-color: #3B3D40;
+}
+.bg-davys-grey {
+	background-color: #525659;
 }
 .transparent {
 	opacity: 90%;

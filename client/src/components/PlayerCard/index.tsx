@@ -11,8 +11,8 @@ const PlayerCard = (props: Prop) => {
 
   const renderPlayer = player.map((item: Player, index: number) => {
     return (
-      <div className="player bg-blue" key={`player-${item.id}`}>
-        <div>
+      <div className="player fc c-container bg-blue i-absolute" key={`player-${item.id}`}>
+        <div className="c-item">
           <p className={`${item.isAlive ? "alive" : "dead"}`}>
             {item.username}
           </p>
@@ -22,7 +22,7 @@ const PlayerCard = (props: Prop) => {
   });
 
   return (
-    <div className="fr c-item bg-red">
+    <div className="fr c-item bg-red con-relative">
       {renderPlayer}
     </div>
   );

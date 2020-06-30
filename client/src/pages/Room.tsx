@@ -5,7 +5,6 @@ import { RouteComponentProps } from 'react-router';
 
 import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
-// import withReactContent from 'sweetalert2-react-content';
 import { Modal } from '@material-ui/core';
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -199,46 +198,52 @@ const Room = (props: Props) => {
 			text: word
 		});
 	};
-	// const VoteSwal = withReactContent(Swal);
+
+	const displayVote = () => {
+		swal({
+			title: `Who's this unlucky bastard`,
+			text: 'vote that motherfucker',
+			content: (<VoteCard player={player}/>),
+			buttons: {
+				confirm: 'Ye',
+				cancel : 'Cancel'
+			}
+		})
+	}
 	const toggleVote = () => {
 		setVoteOpen(!voteOpen);
 	}
 
 	return (
-		<div className="root">
+		<div className="root bg-rich-black">
 			<div id="room" className="main fr c-container">
 				<div id="return-button" className="" >
 					<Link to="/">
-						<FiArrowLeft size="2em" className="nav"/>
+						<FiArrowLeft size="2em" className="nav txt-white"/>
 					</Link>
 				</div>
 				<div id="room-game" className="fc c-container">
-						<div id="game-table" className="fc c-container">
-							<h1 className="c-item">Table</h1>
+						<div id="game-table" className="fc c-container bg-raisin-black">
+							{/* <h1 className="c-item txt-white">Table</h1> */}
 							<PlayerCard player={player}/>
 						</div>
 						<div id="game-console" className="fr c-container">
-							<div id="game-log" className="fc bg-white">
+							<div id="game-log" className="fc bg-raisin-black">
 								<LogCard log={log}/>
 							</div>
-							<div id="game-word" className="fr bg-white c-container rounded" onClick={displayWord}>
-								<h4 className="c-item">Click to check your word</h4>
+							<div id="game-word" className="fr bg-raisin-black c-container rounded" onClick={displayWord}>
+								<h4 className="c-item txt-white">Click to check your word</h4>
 							</div>
-							<div id="game-vote" className="fr c-container bg-white rounded" onClick={toggleVote} >
-								<h1 className="c-item">Vote box</h1>
-								<Modal open={voteOpen} onClose={toggleVote}>
-									<div>
-										<VoteCard player={player}/>
-									</div>
-								</Modal>
+							<div id="game-vote" className="fr c-container bg-raisin-black rounded" onClick={displayVote} >
+								<h1 className="c-item txt-white">Vote</h1>
 							</div>
 						</div>
 				</div>
-				<div id="room-chat" className="fc bg-white">
-					<div id="chat-box" className="bg-blue">
+				<div id="room-chat" className="fc bg-raisin-black">
+					<div id="chat-box" className="bg-black-olive">
 						<ChatCard chat={chat}/>
 					</div>
-					<input id="chat-bar" className="" placeholder="spit it out"/>
+					<input id="chat-bar" className="bg-black-olive" placeholder="spit it out"/>
 				</div>
 			</div>
 			<Footer/>

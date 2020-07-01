@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import {
   FiPlus,
   FiMinus
 } from 'react-icons/fi';
 
 interface Prop {
-
+  hook?: ((event: FormEvent<HTMLFormElement>) => void);
 };
 
 
 const CreateRoomCard = (props: Prop) => {
+  const { hook } = props;
+
+  const dummy = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    alert("ye");
+  }
+  
+
   return (
-    <form>
+    <form onSubmit={hook} style={{marginBottom: '15%'}} >
       <div className="fr c-container">
         <p>Player</p>
         <FiMinus className="c-item"/>
@@ -36,7 +44,9 @@ const CreateRoomCard = (props: Prop) => {
         <label htmlFor="en" className="c-item">en</label><br/>
         <input type="radio" id="id" name="language" value="id"/>
         <label htmlFor="id" className="c-item">id</label><br/>
-        
+      </div>
+      <div>
+        <button type="submit">Create</button>
       </div>
     </form>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import Swal from 'sweetalert2';
 
 import { Player } from '../../types';
@@ -7,8 +7,8 @@ interface Prop {
   player: Player[];
 }
 
-const PlayerCard = (props: Prop) => {
-  const { player } = props;
+const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
+  
   const colors: string[] = [
     'pastel-red',
     'melon',

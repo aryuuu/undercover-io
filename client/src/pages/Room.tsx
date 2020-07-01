@@ -184,12 +184,19 @@ const Room = (props: Props) => {
 			isAlive: true
 		},
 	];
+	const me: Player = {
+		id: 'bender',
+		username: 'Bender',
+		isHost: true,
+		isAlive: true,
+		score: 10,
+		avatar: 'bender-pic'
+	}
 
 	const [ word, setWord ] = useState('Pisang raja');
 	const [ log, setLog ] = useState(dummyLog);
 	const [ chat, setChat ] = useState(dummyChat);
 	const [ player, setPlayer ] = useState(dummyPlayer);
-	const [ voteOpen, setVoteOpen ] = useState(false);
 
 	
 	const displayWord = () => {
@@ -198,7 +205,6 @@ const Room = (props: Props) => {
 			text: word
 		});
 	};
-
 	const displayVote = () => {
 		swal({
 			title: `Who's this unlucky bastard`,
@@ -208,11 +214,26 @@ const Room = (props: Props) => {
 				confirm: 'Ye',
 				cancel : 'Cancel'
 			}
-		})
+		});
+	};
+	const sendChat = (e: any) => {
+		e.preventDefault();
+		const content: string = e.target.chat.value.trim();
+		if (content) {
+			const temp: Chat = {
+				sender: me.username,
+				content: content,
+				timestamp: Date.now()
+			}
+			setChat([...chat, temp]);
+		}
+
 	}
-	const toggleVote = () => {
-		setVoteOpen(!voteOpen);
-	}
+
+	// useEffect(() => {
+
+	// }, [chat]);
+
 
 	return (
 		<div className="root bg-rich-black">
@@ -243,7 +264,9 @@ const Room = (props: Props) => {
 					<div id="chat-box" className="bg-black-olive">
 						<ChatCard chat={chat}/>
 					</div>
-					<input id="chat-bar" type="text" className="bg-black-olive" placeholder="spit it out"/>
+					<form onSubmit={sendChat}>
+						<input id="chat-bar" type="text" name="chat" className="bg-black-olive" placeholder="spit it out"/>
+					</form>
 				</div>
 			</div>
 			<Footer/>

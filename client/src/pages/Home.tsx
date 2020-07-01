@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
 
 import { 
@@ -21,23 +22,41 @@ interface Prop {
 }
 
 const Home = (props: Prop) => {
+	const history = useHistory();
 
 	const createRoom = () => {
 		swal({
 			title: 'Create room',
-			text: 'content',
 			buttons: false,
-			content: (<CreateRoomCard/>)
-		})
-	}
+			content: (<CreateRoomCard hook={createHook}/>)
+		});
+	};
+
+	const createHook = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		history.push({
+			pathname: '/room/123455'
+		});
+	};
+
+	const joinHook = (e: any) => {
+		e.preventDefault();
+		const roomId: string = e.target.roomId.value.trim();
+		history.push({
+			pathname: `/room/${roomId}`
+		});
+	};
+
 
 	const joinRoom = () => {
 		swal({
 			title: 'Join room',
 			text: 'Enter room id',
+			buttons: false,
 			content: (
-				<form>
-					<input type="text" placeholder="room id"/>
+				<form onSubmit={joinHook} className="fc c-container">
+					<input type="text" name="roomId" placeholder="room id" className="c-item"/>
+					<button type="submit" className="c-item">Join</button>
 				</form>
 			)
 		})
@@ -61,8 +80,10 @@ const Home = (props: Prop) => {
 								</form>
 							</div>
 							<div className="fr c-container">
-								<Link to="/room/1342384" className="nav txt-white" onClick={createRoom}  >Create</Link>
-								<Link to="/room/13254477" className="nav txt-white" onClick={joinRoom} >Join</Link>
+								{/* <Link to="/room/1342384" className="nav txt-white" onClick={createRoom}  >Create</Link>
+								<Link to="/room/13254477" className="nav txt-white" onClick={joinRoom} >Join</Link> */}
+								<p id="create" className="nav txt-white" onClick={createRoom}>Create</p>
+								<p id="join" className="nav txt-white" onClick={joinRoom}>Join</p>
 							</div>
 						</div>
 						<div id="right-panel" className="menu-panel fc c-container bg-raisin-black">

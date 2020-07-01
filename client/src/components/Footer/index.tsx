@@ -1,17 +1,20 @@
 import React from 'react';
 import Link from '@material-ui/core/Link';
+import { FaGithub } from 'react-icons/fa';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
 function Copyright() {
   return (
     <Typography variant="body2" className="txt-white">
-      {'Copyright © '}
+      {/* {'Copyright © '} */}
+      {'Check me out on '}
       <Link color="inherit" href="https://github.com/aryuuu" target="_blank">
-        M Algah Fattah Illahi
-      </Link>{' '}
+        github <FaGithub color="inherit"/>
+      </Link>
+      {/* {' '}
       {new Date().getFullYear()}
-      {'.'}
+      {'.'} */}
     </Typography>
   );
 }

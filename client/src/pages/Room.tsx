@@ -5,12 +5,12 @@ import { RouteComponentProps } from 'react-router';
 
 import Swal from 'sweetalert2';
 import swal from '@sweetalert/with-react';
-import { Modal } from '@material-ui/core';
 import { FiArrowLeft } from 'react-icons/fi';
 
 /** types */
 import { Log, Chat, Player } from '../types';
 /** resources */
+import { apiUrl, wsUrl } from '../config';
 /** components */
 import Footer from '../components/Footer';
 import LogCard from '../components/LogCard';

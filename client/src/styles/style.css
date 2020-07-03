@@ -83,14 +83,13 @@ body {
 	
 }
 .icon {
-	/* max-height: 1%; */
-	max-width: 15%;
+	width: 15%;
 }
 .avatar {
 	border-radius: 50%;
 	border-style: solid;
-	padding: 2%;
-	margin: 4%;
+	padding: 1.5%;
+	margin: 3%;
 	
 }
 .arrow {

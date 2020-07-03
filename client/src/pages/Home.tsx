@@ -1,24 +1,21 @@
-import React, { FormEvent } from 'react';
-import Head from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
 
 import { 
 	FaChevronLeft, 
 	FaChevronRight 
 } from 'react-icons/fa';
 import Swal from 'sweetalert2';
-import swal from '@sweetalert/with-react';
 import { FcGoogle } from 'react-icons/fc';
 
 /** components */
 import Footer from '../components/Footer';
-import CreateRoomCard from '../components/CreateRoomCard';
-import JoinRoomCard from '../components/JoinRoomCard';
 /** images */
-import incognitoLogo from '../assets/incognito.svg';
+// import incognitoLogo from '../assets/incognito.svg';
+
+/**resources */
+import { apiUrl } from '../config'
 
 interface Prop {
 
@@ -26,86 +23,98 @@ interface Prop {
 
 const Home = (props: Prop) => {
 	const history = useHistory();
-	const [ playerCount, setPlayerCount ] = useState(4);
-	const [ UndercoverCount, setUndercoverCount ] = useState(1);
-	const [ mrWhiteCount, setMrWhiteCount ] = useState(0);
+	const [ username, setUsername ] = useState('');
+	const [ avatar, setAvatar ] = useState(0);
+	// const [ playerCount, setPlayerCount ] = useState(4);
+	// const [ UndercoverCount, setUndercoverCount ] = useState(1);
+	// const [ mrWhiteCount, setMrWhiteCount ] = useState(0);
+	const dummyAvatars: string[] = [
+		'incognito', 
+		'bone',
+		'bone-02',
+		'bug-03',
+		'cat',
+		'cat-03',
+		'owl',
+		'social-01',
+		'spider-02',
+		'spider-03',
+		'square-social-01',
+		'pig-03'
+	];
+
+	const prevAvatar = () => {
+		setAvatar((((avatar-1) % dummyAvatars.length) + dummyAvatars.length) % dummyAvatars.length);
+	};
+	const nextAvatar = () => {
+		setAvatar((((avatar+1) % dummyAvatars.length) + dummyAvatars.length) % dummyAvatars.length);
+	};
 	
 	const createRoom = () => {
-		Swal.fire({
-			title: 'Create room',
-			icon: 'warning',
-			html: `
-			<h4>Player</h4>
-			<input type="range" id="player-count" class="swal2-input" name="player-count" min="4" max="20"/>
-			<h4>Undercover</h4>
-			<input type="range" id="undercover-count" class="swal2-input" name="undercover-count" min="1" max="20"/>
-			<h4>Mr. White</h4>
-			<input type="range" id="mr-white-count" class="swal2-input" name="mr-white-count" min="0" max="20"/>`,
-			preConfirm: () => {
-				// if (document.getElementById('player-count') && 
-				// 		document.getElementById('player-count') && 
-				// 		document.getElementById('player-count')) {
-				// 		setPlayerCount(parseInt((document.getElementById('player-count')! as HTMLInputElement).value) || 4);
-				// 		setUndercoverCount(parseInt((document.getElementById('undercover-count')! as HTMLInputElement).value) || 4);
-				// 		setMrWhiteCount(parseInt((document.getElementById('mrwhite-count')! as HTMLInputElement).value) || 4);
-				// }
-				history.push({
-					pathname: '/room/12345'
+		Swal.mixin({
+			input: 'range',
+			confirmButtonText: 'Next &rarr;',
+			progressSteps: ['1', '2', '3']
+		}).queue([
+			{
+				title: 'Player',
+				inputValue: '4',
+				inputAttributes: {
+					min: '4',
+					max: '20'
+				}
+			},
+			{
+				title: 'Undercover',
+				inputValue: '1',
+				inputAttributes: {
+					min: '0',
+					max: '20'
+				}
+			},
+			{
+				title: 'Mr. White',
+				inputValue: '0',
+				inputAttributes: {
+					min: '0',
+					max: '20'
+				}
+			},
+		]).then((result: any) => {
+			if (result.value) {
+				const answers = JSON.stringify(result.value);
+				Swal.fire({
+					title: 'Confirm',
+					html: `
+						Your answers:
+						<pre><code>${answers}</code></pre>
+					`,
+					confirmButtonText: 'Create',
+					showLoaderOnConfirm: true,
+					preConfirm: () => {
+						history.push({
+							pathname: `/room/1234`
+						});
+					}
 				})
-				
 			}
 		})
+		
 	};
-
-	const createHook = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		history.push({
-			pathname: '/room/123455'
-		});
-	};
-
-	const joinHook = (e: any) => {
-		e.preventDefault();
-		const roomId: string = e.target.roomId.value.trim();
-		history.push({
-			pathname: `/room/${roomId}`
-		});
-	};
-
-	const joinForm = () => {
-		return (
-			<form onSubmit={joinHook} className="fc c-container">
-				<input type="text" name="roomId" placeholder="room id" className="c-item"/>
-				<button type="submit" className="c-item">Join</button>
-			</form>
-		)
-	}
 	const joinRoom = () => {
 		Swal.fire({
-			title: 'Join room',
-			// html: renderToStaticMarkup(<JoinRoomCard/>)
+			title: 'Join Room',
 			input: 'text',
-			showCancelButton: true,
+			confirmButtonText: 'Join',
 			preConfirm: (value) => {
 				history.push({
 					pathname: `/room/${value}`
 				})
 			}
 			
-		})
-
-		// swal({
-		// 	title: 'Join room',
-		// 	text: 'Enter room id',
-		// 	buttons: false,
-		// 	content: (
-		// 		<form onSubmit={joinHook} className="fc c-container">
-		// 			<input type="text" name="roomId" placeholder="room id" className="c-item"/>
-		// 			<button type="submit" className="c-item">Join</button>
-		// 		</form>
-		// 	)
-		// })
+		});
 	};
+
 
 	useEffect(() => {
 		document.title = "Home | undercover.io"
@@ -119,9 +128,9 @@ const Home = (props: Prop) => {
 					<div className="menu fr c-container">
 						<div id="left-panel" className="menu-panel fc c-container bg-raisin-black">
 							<div id="avatar-choice" className="fr c-container">
-								<FaChevronLeft size="4em" className="c-item txt-white"/>
-								<img className="icon avatar c-item bg-white" src={incognitoLogo} alt="avatar"/>
-								<FaChevronRight size="4em" className="c-item txt-white"/>
+								<FaChevronLeft size="4em" className="c-item txt-white" onClick={prevAvatar} />
+								<img className="icon avatar c-item bg-white" src={`/img/${dummyAvatars[avatar]}.svg`} alt="avatar"/>
+								<FaChevronRight size="4em" className="c-item txt-white" onClick={nextAvatar}/>
 							</div>
 							<div className="form-element c-container">
 								<form action="">
@@ -129,8 +138,6 @@ const Home = (props: Prop) => {
 								</form>
 							</div>
 							<div className="fr c-container">
-								{/* <Link to="/room/1342384" className="nav txt-white" onClick={createRoom}  >Create</Link>
-								<Link to="/room/13254477" className="nav txt-white" onClick={joinRoom} >Join</Link> */}
 								<p id="create" className="nav txt-white" onClick={createRoom}>Create</p>
 								<p id="join" className="nav txt-white" onClick={joinRoom}>Join</p>
 							</div>

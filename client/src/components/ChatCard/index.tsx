@@ -18,7 +18,7 @@ const ChatCard = (props: Prop) => {
   });
 
   return (
-    <div>
+    <div id="chat-container" className="fcr">
       { renderChat }
     </div>
   );

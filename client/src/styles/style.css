@@ -116,6 +116,9 @@ body {
 	border-radius: 10px;
 	margin: .3%;
 	max-height: 90vh;
+	width: 20vw;
+	/* max-width: 30vw;
+	min-width: 25vw; */
 	opacity: 95%;
 }
 #game-table {
@@ -127,7 +130,7 @@ body {
 	max-height: 50%;
 	max-width: 60%;
 	margin: 1%;
-	/* transform: translate(-40px, -40px); */
+	transform: translate(-40px, -40px);
 }
 .player {
 	height: 80px;
@@ -137,11 +140,14 @@ body {
 	border-style: solid;
 	border-radius: 50%;
 	--scaler: 1;
-	transform: translateX(-40px) translateY(-40px) scale(var(--scaler)) ;
+	position: relative;
+	transform: scale(var(--scaler)) ;
 	/* transform: translateY(-40px); */
 }
 .player:hover {
 	--scaler: 1.2;
+	z-index: 1;
+	/* --z: .001; */
 }
 .alive {
 	margin-top: 2px;
@@ -244,7 +250,10 @@ body {
 }
 .chat-balloon {
 	margin: 5px;
-	padding: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 10px;
+	padding-right: 10px;
 	border-radius: 6px;
 	max-width: 90%;
 	--scaler: 1;
@@ -301,6 +310,10 @@ link {
 .fc {
 	display: flex;
 	flex-direction: column;
+}
+.fcr {
+	display: flex;
+	flex-direction: column-reverse;
 }
 .fr {
 	display: flex;

@@ -219,21 +219,31 @@ const Room = (props: Props) => {
 	const sendChat = (e: any) => {
 		e.preventDefault();
 		const content: string = e.target.chat.value.trim();
+		e.target.chat.value = "";
 		if (content) {
 			const temp: Chat = {
 				sender: me.username,
 				content: content,
 				timestamp: Date.now()
 			}
-			setChat([...chat, temp]);
+			setChat([temp, ...chat]);
 		}
-
+		
 	}
+	
+	useEffect(() => {
+		console.log("time to scroll");
+		let chatContainer = document.getElementById("chat-container");
+		if (chatContainer) {
+			console.log(`scroll top: ${chatContainer.scrollTop}`);
+			console.log(`scroll height: ${chatContainer.scrollHeight}`)
+			chatContainer.scrollTop = chatContainer.scrollHeight;
+		}
+	}, [chat]);
 
-	// useEffect(() => {
-
-	// }, [chat]);
-
+	useEffect(() => {
+		document.title = "Room | undercover.io"
+	});
 
 	return (
 		<div className="root bg-rich-black">
@@ -265,7 +275,7 @@ const Room = (props: Props) => {
 						<ChatCard chat={chat}/>
 					</div>
 					<form onSubmit={sendChat}>
-						<input id="chat-bar" type="text" name="chat" className="bg-black-olive" placeholder="spit it out"/>
+						<input id="chat-bar" type="text" name="chat" className="bg-black-olive txt-white" placeholder="spit it out"/>
 					</form>
 				</div>
 			</div>

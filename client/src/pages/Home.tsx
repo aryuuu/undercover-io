@@ -1,7 +1,9 @@
 import React, { FormEvent } from 'react';
+import Head from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import { 
 	FaChevronLeft, 
@@ -14,6 +16,7 @@ import { FcGoogle } from 'react-icons/fc';
 /** components */
 import Footer from '../components/Footer';
 import CreateRoomCard from '../components/CreateRoomCard';
+import JoinRoomCard from '../components/JoinRoomCard';
 /** images */
 import incognitoLogo from '../assets/incognito.svg';
 
@@ -23,13 +26,35 @@ interface Prop {
 
 const Home = (props: Prop) => {
 	const history = useHistory();
-
+	const [ playerCount, setPlayerCount ] = useState(4);
+	const [ UndercoverCount, setUndercoverCount ] = useState(1);
+	const [ mrWhiteCount, setMrWhiteCount ] = useState(0);
+	
 	const createRoom = () => {
-		swal({
+		Swal.fire({
 			title: 'Create room',
-			buttons: false,
-			content: (<CreateRoomCard hook={createHook}/>)
-		});
+			icon: 'warning',
+			html: `
+			<h4>Player</h4>
+			<input type="range" id="player-count" class="swal2-input" name="player-count" min="4" max="20"/>
+			<h4>Undercover</h4>
+			<input type="range" id="undercover-count" class="swal2-input" name="undercover-count" min="1" max="20"/>
+			<h4>Mr. White</h4>
+			<input type="range" id="mr-white-count" class="swal2-input" name="mr-white-count" min="0" max="20"/>`,
+			preConfirm: () => {
+				// if (document.getElementById('player-count') && 
+				// 		document.getElementById('player-count') && 
+				// 		document.getElementById('player-count')) {
+				// 		setPlayerCount(parseInt((document.getElementById('player-count')! as HTMLInputElement).value) || 4);
+				// 		setUndercoverCount(parseInt((document.getElementById('undercover-count')! as HTMLInputElement).value) || 4);
+				// 		setMrWhiteCount(parseInt((document.getElementById('mrwhite-count')! as HTMLInputElement).value) || 4);
+				// }
+				history.push({
+					pathname: '/room/12345'
+				})
+				
+			}
+		})
 	};
 
 	const createHook = (e: FormEvent<HTMLFormElement>) => {
@@ -47,20 +72,44 @@ const Home = (props: Prop) => {
 		});
 	};
 
-
-	const joinRoom = () => {
-		swal({
-			title: 'Join room',
-			text: 'Enter room id',
-			buttons: false,
-			content: (
-				<form onSubmit={joinHook} className="fc c-container">
-					<input type="text" name="roomId" placeholder="room id" className="c-item"/>
-					<button type="submit" className="c-item">Join</button>
-				</form>
-			)
-		})
+	const joinForm = () => {
+		return (
+			<form onSubmit={joinHook} className="fc c-container">
+				<input type="text" name="roomId" placeholder="room id" className="c-item"/>
+				<button type="submit" className="c-item">Join</button>
+			</form>
+		)
 	}
+	const joinRoom = () => {
+		Swal.fire({
+			title: 'Join room',
+			// html: renderToStaticMarkup(<JoinRoomCard/>)
+			input: 'text',
+			showCancelButton: true,
+			preConfirm: (value) => {
+				history.push({
+					pathname: `/room/${value}`
+				})
+			}
+			
+		})
+
+		// swal({
+		// 	title: 'Join room',
+		// 	text: 'Enter room id',
+		// 	buttons: false,
+		// 	content: (
+		// 		<form onSubmit={joinHook} className="fc c-container">
+		// 			<input type="text" name="roomId" placeholder="room id" className="c-item"/>
+		// 			<button type="submit" className="c-item">Join</button>
+		// 		</form>
+		// 	)
+		// })
+	};
+
+	useEffect(() => {
+		document.title = "Home | undercover.io"
+	}, []);
 
 	return (
 		<>
@@ -96,6 +145,7 @@ const Home = (props: Prop) => {
 				</div>
 				{/* footer */}
 				<Footer/>
+				
 			</div>
 		</>
 	);

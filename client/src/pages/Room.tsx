@@ -232,18 +232,23 @@ const Room = (props: Props) => {
 				content: content,
 				timestamp: Date.now()
 			}
-			setChat([temp, ...chat]);
+			setChat([...chat, temp]);
 		}
 		
 	}
 	
 	useEffect(() => {
-		console.log("time to scroll");
-		let chatContainer = document.getElementById("chat-container");
-		if (chatContainer) {
-			console.log(`scroll top: ${chatContainer.scrollTop}`);
-			console.log(`scroll height: ${chatContainer.scrollHeight}`)
-			chatContainer.scrollTop = chatContainer.scrollHeight;
+		// console.log("time to scroll");
+		// let chatContainer = document.getElementById("chat-container");
+		// if (chatContainer) {
+		// 	console.log(`scroll top: ${chatContainer.scrollTop}`);
+		// 	console.log(`scroll height: ${chatContainer.scrollHeight}`)
+		// 	chatContainer.scrollTop = chatContainer.scrollHeight;
+		// }
+		const chatBase = document.getElementById('chat-base');
+		if (chatBase) {
+			console.log(`yeah, time to scroll to this bitch`);
+			chatBase.scrollIntoView(true);
 		}
 	}, [chat]);
 

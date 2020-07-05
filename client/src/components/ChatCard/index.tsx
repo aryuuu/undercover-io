@@ -18,8 +18,9 @@ const ChatCard = (props: Prop) => {
   });
 
   return (
-    <div id="chat-container" className="fcr">
+    <div id="chat-container" className="">
       { renderChat }
+      <div id="chat-base"></div>
     </div>
   );
 };

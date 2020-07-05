@@ -39,7 +39,7 @@ export const reqJoinRoom = async (io: SocketIOClient.Socket , id: string, player
     console.log('Please specify room id');
     return 'Please specify room id';
   } else {
-    io.emit('join-room', { roomId: id, ...player})
+    io.emit('join-room', { roomId: id, player: player})
     return 'success';
   }
 }

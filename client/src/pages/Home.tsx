@@ -69,7 +69,7 @@ const Home = (props: Prop) => {
 		if (!username) {
 			Swal.fire({
 				icon: 'error',
-				text: 'Please specify username first'
+				text: 'Please specify username'
 			})
 			return;
 		}
@@ -137,17 +137,24 @@ const Home = (props: Prop) => {
 		
 	};
 	const joinRoom = () => {
+		if (!username) {
+			Swal.fire({
+				icon: 'error',
+				text: 'Please specify username'
+			})
+			return;
+		}
 		Swal.fire({
 			title: 'Join Room',
 			input: 'text',
 			confirmButtonText: 'Join',
 			preConfirm: async (value) => {
 				let status = await reqJoinRoom(socket, value, {
-					id: `username${Date.now()}`,
+					id: `${username}${Date.now()}`,
 					username: username,
 					isHost: false,
 					isAlive: true,
-					avatar: '',
+					avatar: dummyAvatars[avatar],
 					score: 0
 				});
 				if (status !== 'success') {
@@ -174,15 +181,15 @@ const Home = (props: Prop) => {
 		});
 		socket.on('create-reply', (res: CreateRoomRes) => {
 			if (res.status === 'success') {
+				history.push({
+					pathname: `/room/${res.roomId}`,
+				});
 				Swal.fire({
 					title: `Server`,
 					icon: 'success',
 					text: `${res.message}`,
-					preConfirm: () => {
-						history.push({
-							pathname: `/room/${res.roomId}`,
-						});
-					}
+					timer: 2000,
+					onBeforeOpen: () => Swal.showLoading()
 				});
 
 			} else {

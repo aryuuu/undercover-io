@@ -26,7 +26,7 @@ const socket = (io: socketio.Server) => {
       })
     });
     conn.on('join-room', (req: JoinRoomReq) => {
-      console.log(`user ${req.userId} wants to join room ${req.roomId}`);
+      console.log(`user ${req.player.id} wants to join room ${req.roomId}`);
       conn.emit('join-reply', {
         resId: req.reqId,
         roomId: req.roomId,

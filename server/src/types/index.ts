@@ -43,6 +43,10 @@ export interface JoinRoomReq extends Request {
   userId: string;
   player: Player;
 }
+export interface VoteReq extends Request {
+  voter: string;
+  voteTarget: string;
+}
 export interface CreateRoomRes extends Response {
   roomId: string;
 }

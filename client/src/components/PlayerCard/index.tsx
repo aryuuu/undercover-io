@@ -39,7 +39,7 @@ const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
       }}>
         <div className={`player fc c-container i-absolute bg-${colors[index % colors.length]}`} onClick={() => showStatus(item)}>
           <div className="c-item">
-            <p className={`${item.isAlive ? "alive" : "dead"}`}>
+            <p className={`${item.isAlive ? "alive" : "dead"} txt-fredoka`}>
               {item.username}
             </p>
           </div>

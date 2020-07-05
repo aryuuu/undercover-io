@@ -28,6 +28,7 @@ export interface Request {
 }
 export interface Response {
   resId: string;
+  status: string;
   message: string;
 }
 export interface CreateRoomReq extends Request {

@@ -1,4 +1,5 @@
 import socketio from 'socket.io';
+import { v4 as uuid } from 'uuid';
 
 import { 
   Room, 
@@ -16,14 +17,23 @@ const socket = (io: socketio.Server) => {
       console.log(`user ${req.userId} wants to create a room`);
       // console.log(`room spec: ${JSON.stringify(req)}`);
       conn.emit('create-reply', { 
-        roomId: ``,
+        resId: req.reqId,
+        roomId: uuid(),
+        room: {},
+        status: 'success',
         message: `ok ${req.username}, please wait a second`,
 
       })
     });
     conn.on('join-room', (req: JoinRoomReq) => {
       console.log(`user ${req.userId} wants to join room ${req.roomId}`);
-      conn.emit('join-reply')
+      conn.emit('join-reply', {
+        resId: req.reqId,
+        roomId: req.roomId,
+        room: {},
+        status: 'success',
+        message: `Redirecting you to room ${req.roomId}`
+      });
     })
     conn.on('chat', (data: Chat) => {
       console.log(`${data.sender} says: "${data.content}"`);

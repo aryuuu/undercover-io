@@ -18,7 +18,8 @@
     "socket.io-client": "^2.3.0",
     "sweetalert-react": "^0.4.11",
     "sweetalert2": "^9.15.2",
-    "sweetalert2-react-content": "^3.0.1"
+    "sweetalert2-react-content": "^3.0.1",
+    "uuid": "^8.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,7 +47,9 @@
     "@types/react": "^16.9.41",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.5",
+    "@types/socket.io-client": "^1.4.33",
     "@types/sweetalert": "^2.0.4",
+    "@types/uuid": "^8.0.0",
     "typescript": "^3.9.5"
   }
 }

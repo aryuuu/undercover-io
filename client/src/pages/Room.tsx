@@ -8,15 +8,21 @@ import swal from '@sweetalert/with-react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 /** types */
-import { Log, Chat, Player } from '../types';
+import { 
+	Log, 
+	Chat, 
+	Player, 
+	Room as RoomIf,
+} from '../types';
 /** resources */
 import { apiUrl, wsUrl } from '../config';
+/** handlers */
 /** components */
 import Footer from '../components/Footer';
 import LogCard from '../components/LogCard';
+import VoteCard from '../components/VoteCard';
 import ChatCard from '../components/ChatCard';
 import PlayerCard from '../components/PlayerCard';
-import VoteCard from '../components/VoteCard';
 /** images */
 
 interface MatchParams {
@@ -247,6 +253,7 @@ const Room = (props: Props) => {
 
 	return (
 		<div className="root bg-rich-black">
+			<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"/>
 			<div id="room" className="main fr c-container">
 				<div id="return-button" className="" >
 					<Link to="/">
@@ -255,18 +262,17 @@ const Room = (props: Props) => {
 				</div>
 				<div id="room-game" className="fc c-container">
 						<div id="game-table" className="fc c-container bg-raisin-black">
-							{/* <h1 className="c-item txt-white">Table</h1> */}
 							<PlayerCard player={player}/>
 						</div>
 						<div id="game-console" className="fr c-container">
 							<div id="game-log" className="fc bg-raisin-black">
 								<LogCard log={log}/>
 							</div>
-							<div id="game-word" className="fr bg-raisin-black c-container rounded" onClick={displayWord}>
-								<h4 className="c-item txt-white">Click to check your word</h4>
+							<div id="game-word" className="fr bg-raisin-black c-container txt-center rounded" onClick={displayWord}>
+								<h4 className="c-item txt-white txt-fredoka">Click to check your word</h4>
 							</div>
 							<div id="game-vote" className="fr c-container bg-raisin-black rounded" onClick={displayVote} >
-								<h1 className="c-item txt-white">Vote</h1>
+								<h1 className="c-item txt-white txt-fredoka">Start</h1>
 							</div>
 						</div>
 				</div>

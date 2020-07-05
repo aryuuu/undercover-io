@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import { v4 as uuid } from 'uuid';
 
 import { 
 	FaChevronLeft, 
@@ -11,11 +13,19 @@ import { FcGoogle } from 'react-icons/fc';
 
 /** components */
 import Footer from '../components/Footer';
-/** images */
-// import incognitoLogo from '../assets/incognito.svg';
-
+/** types */
+import { 
+	Room,
+	Player,
+	CreateRoomReq,
+	JoinRoomReq,
+	CreateRoomRes,
+	JoinRoomRes
+} from '../types';
 /**resources */
-import { apiUrl } from '../config'
+// import { apiUrl, dummyApiUrl } from '../config'
+/** handlers */
+import { reqCreateRoom, reqJoinRoom } from '../handlers';
 
 interface Prop {
 
@@ -23,11 +33,10 @@ interface Prop {
 
 const Home = (props: Prop) => {
 	const history = useHistory();
-	const [ username, setUsername ] = useState('');
-	const [ avatar, setAvatar ] = useState(0);
-	// const [ playerCount, setPlayerCount ] = useState(4);
-	// const [ UndercoverCount, setUndercoverCount ] = useState(1);
-	// const [ mrWhiteCount, setMrWhiteCount ] = useState(0);
+	const [username, setUsername] = useState('');
+	const [avatar, setAvatar] = useState(0);
+	const [socket, setSocket] = useState(null as any);
+
 	const dummyAvatars: string[] = [
 		'incognito', 
 		'bone',
@@ -42,15 +51,28 @@ const Home = (props: Prop) => {
 		'square-social-01',
 		'pig-03'
 	];
-
+	
 	const prevAvatar = () => {
 		setAvatar((((avatar-1) % dummyAvatars.length) + dummyAvatars.length) % dummyAvatars.length);
 	};
 	const nextAvatar = () => {
 		setAvatar((((avatar+1) % dummyAvatars.length) + dummyAvatars.length) % dummyAvatars.length);
 	};
+	const submitUsername = (e: any) => {
+		e.preventDefault();
+		if (e.target.username.value.trim()) {
+			setUsername(e.target.username.value.trim());
+		}
+	}
 	
 	const createRoom = () => {
+		if (!username) {
+			Swal.fire({
+				icon: 'error',
+				text: 'Please specify username first'
+			})
+			return;
+		}
 		Swal.mixin({
 			input: 'range',
 			confirmButtonText: 'Next &rarr;',
@@ -86,15 +108,28 @@ const Home = (props: Prop) => {
 				Swal.fire({
 					title: 'Confirm',
 					html: `
-						Your answers:
-						<pre><code>${answers}</code></pre>
+						<p>Player: ${result.value[0]}</p>
+						<p>Undercover: ${result.value[1]}</p>
+						<p>Mr White: ${result.value[2]}</p>
 					`,
 					confirmButtonText: 'Create',
 					showLoaderOnConfirm: true,
-					preConfirm: () => {
-						history.push({
-							pathname: `/room/1234`
+					preConfirm: async () => {
+						let status = await reqCreateRoom(socket, {
+							reqId: uuid(),
+							userId: `${username}${Date.now()}`,
+							username: username,
+							player: parseInt(result.value[0]),
+							undercover: parseInt(result.value[1]),
+							mrwhite: parseInt(result.value[2])
 						});
+						if (status !== 'success') {
+							Swal.fire({
+								icon: 'error',
+								text: `${status}`
+							})
+						}
+					
 					}
 				})
 			}
@@ -106,19 +141,78 @@ const Home = (props: Prop) => {
 			title: 'Join Room',
 			input: 'text',
 			confirmButtonText: 'Join',
-			preConfirm: (value) => {
-				history.push({
-					pathname: `/room/${value}`
-				})
+			preConfirm: async (value) => {
+				let status = await reqJoinRoom(socket, value, {
+					id: `username${Date.now()}`,
+					username: username,
+					isHost: false,
+					isAlive: true,
+					avatar: '',
+					score: 0
+				});
+				if (status !== 'success') {
+					Swal.fire({
+						icon: 'error',
+						text: `${status}`
+					})
+				}
 			}
 			
 		});
 	};
-
-
+	
 	useEffect(() => {
 		document.title = "Home | undercover.io"
+		setSocket(io('http://localhost:3003/', { transports: ['polling', 'websocket']}));
 	}, []);
+	
+	useEffect(() => {
+		if (!socket) return;
+		
+		socket.on('new-connection-notif', (res: any) => {
+			console.log(res);
+		});
+		socket.on('create-reply', (res: CreateRoomRes) => {
+			if (res.status === 'success') {
+				Swal.fire({
+					title: `Server`,
+					icon: 'success',
+					text: `${res.message}`,
+					preConfirm: () => {
+						history.push({
+							pathname: `/room/${res.roomId}`,
+						});
+					}
+				});
+
+			} else {
+				Swal.fire({
+					icon: 'error',
+					text: `${res.message}`
+				});
+			}
+		});
+		socket.on('join-reply', (res: JoinRoomRes) => {
+			if (res.status === 'success') {
+				history.push({
+					pathname: `/room/${res.roomId}`
+				})
+				Swal.fire({
+					title: 'Please wait',
+					timer: 1000,
+					onBeforeOpen: () => Swal.showLoading()
+					// preConfirm: () => {
+					// 	history.push(`/room/${res.roomId}`)
+					// }
+				})
+			} else {
+				Swal.fire({
+					icon: 'error',
+					text: `${res.message}`
+				})
+			}
+		})
+	}, [socket]);
 
 	return (
 		<>
@@ -129,22 +223,33 @@ const Home = (props: Prop) => {
 						<div id="left-panel" className="menu-panel fc c-container bg-raisin-black">
 							<div id="avatar-choice" className="fr c-container">
 								<FaChevronLeft size="4em" className="c-item txt-white" onClick={prevAvatar} />
-								<img className="icon avatar c-item bg-white" src={`/img/${dummyAvatars[avatar]}.svg`} alt="avatar"/>
+								<img 
+									className="icon avatar c-item bg-white" 
+									src={`/img/${dummyAvatars[avatar]}.svg`} 
+									alt="avatar"
+								/>
 								<FaChevronRight size="4em" className="c-item txt-white" onClick={nextAvatar}/>
 							</div>
 							<div className="form-element c-container">
-								<form action="">
-									<input type="text" placeholder="XxXPussySlayer_69XxX" className="bg-black-olive rounded"/>
+								<form action="" onSubmit={submitUsername}>
+									<input 
+										id="username"
+										type="text" 
+										name="username"
+										placeholder="XxXPussySlayer_69XxX" 
+										className="bg-black-olive txt-white txt-center" 
+										onChange={(e) => setUsername(e.target.value)}
+									/>
 								</form>
 							</div>
 							<div className="fr c-container">
-								<p id="create" className="nav txt-white" onClick={createRoom}>Create</p>
-								<p id="join" className="nav txt-white" onClick={joinRoom}>Join</p>
+								<p id="create" className="nav txt-white txt-fredoka" onClick={createRoom}>Create</p>
+								<p id="join" className="nav txt-white txt-fredoka" onClick={joinRoom}>Join</p>
 							</div>
 						</div>
 						<div id="right-panel" className="menu-panel fc c-container bg-raisin-black">
 							<div className="fc c-container c-item">
-								<h1 className="txt-white">Login using google</h1>
+								<h1 className="txt-white txt-fredoka">Login using google</h1>
 								<FcGoogle size="5em" className="c-item" />
 							</div>
 						</div>

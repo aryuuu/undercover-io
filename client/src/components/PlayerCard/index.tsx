@@ -25,7 +25,13 @@ const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
   const showStatus = (player: Player) => {
     Swal.fire({
       title: player.username,
-      text: `${player.isAlive ? 'Alive' : 'Dead'}`
+      text: `${player.isAlive ? 'Alive' : 'Dead'}`,
+      showConfirmButton: player.isAlive,
+      confirmButtonText: 'Vote?',
+      preConfirm: () => {
+        // send vote to server
+        return;
+      }
     })
   }
 
@@ -35,9 +41,12 @@ const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
     return (
       <div key={`player-${item.id}`}
       style={{
-        transform: `translate(${Math.cos(fraction*index*degree)*100}px, ${Math.sin(fraction*index*degree)*100}px)`
+        transform: `translate(${Math.cos(fraction*index*degree)*100}px, 
+          ${Math.sin(fraction*index*degree)*100}px)`
       }}>
-        <div className={`player fc c-container i-absolute bg-${colors[index % colors.length]}`} onClick={() => showStatus(item)}>
+        <div className={`player fc c-container i-absolute bg-${colors[index % colors.length]}`} 
+          onClick={() => showStatus(item)}
+        >
           <div className="c-item">
             <p className={`${item.isAlive ? "alive" : "dead"} txt-fredoka`}>
               {item.username}

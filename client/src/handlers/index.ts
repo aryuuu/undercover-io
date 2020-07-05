@@ -5,16 +5,18 @@ import {
   Room, 
   Player,
   CreateRoomReq,
-  JoinRoomReq
+  JoinRoomReq,
+  Chat,
+  VoteReq
 } from '../types';
 
 
 /**
  * Request a room to server
- * @param io socketioclient socket 
+ * @param socket socketioclient socket 
  * @param req room specification to be created at server
  */
-export const reqCreateRoom = async (io: SocketIOClient.Socket, req: CreateRoomReq) => {
+export const reqCreateRoom = async (socket: SocketIOClient.Socket, req: CreateRoomReq) => {
   if (req.username === '') {
     console.log('Please specify your username')
     return 'Please specify your username';
@@ -26,12 +28,18 @@ export const reqCreateRoom = async (io: SocketIOClient.Socket, req: CreateRoomRe
       console.log(`try less undercover or less mr white, or more player`);
       return 'Try less undercover or less mr white, or more player';
   } else {
-    io.emit('create-room', req);
+    socket.emit('create-room', req);
     return 'success';
   }
 }
 
-export const reqJoinRoom = async (io: SocketIOClient.Socket , id: string, player: Player) => {
+/**
+ * request to join a room
+ * @param socket socketio socket
+ * @param id room id 
+ * @param player player object
+ */
+export const reqJoinRoom = async (socket: SocketIOClient.Socket , id: string, player: Player) => {
   if (!player.id || !player.username ) {
     console.log('Please specify username');
     return 'Please specify username';
@@ -39,9 +47,27 @@ export const reqJoinRoom = async (io: SocketIOClient.Socket , id: string, player
     console.log('Please specify room id');
     return 'Please specify room id';
   } else {
-    io.emit('join-room', { roomId: id, player: player})
+    socket.emit('join-room', { roomId: id, player: player})
     return 'success';
   }
+}
+
+/**
+ * 
+ * @param socket socketio client socket
+ * @param chat chat object
+ */
+export const sendChat = async (socket: SocketIOClient.Socket, chat: Chat) => {
+
+}
+
+/**
+ * 
+ * @param socket socketio client socket
+ * @param req vote req
+ */
+export const sendVote = async (socket: SocketIOClient.Socket, req: VoteReq) => {
+
 }
 
 export const apiTest = async (): Promise<string> => {

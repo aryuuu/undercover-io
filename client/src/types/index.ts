@@ -1,6 +1,7 @@
 export interface Chat {
   sender: string,
   content: string,
+  roomId: string;
   timestamp: number
 }
 export interface Log {
@@ -13,8 +14,8 @@ export interface Player {
   username: string;
   score: number;
   avatar: string;
-  isHost: Boolean;
-  isAlive: Boolean;
+  isHost: boolean;
+  isAlive: boolean;
 }
 export interface Room {
   id: string;

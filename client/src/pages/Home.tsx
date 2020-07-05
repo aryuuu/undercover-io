@@ -35,7 +35,7 @@ const Home = (props: Prop) => {
 	const history = useHistory();
 	const [username, setUsername] = useState('');
 	const [avatar, setAvatar] = useState(0);
-	const [socket, setSocket] = useState(null as any);
+	const [socket, setSocket] = useState(null as unknown as SocketIOClient.Socket);
 
 	const dummyAvatars: string[] = [
 		'incognito', 
@@ -181,6 +181,7 @@ const Home = (props: Prop) => {
 		});
 		socket.on('create-reply', (res: CreateRoomRes) => {
 			if (res.status === 'success') {
+				
 				history.push({
 					pathname: `/room/${res.roomId}`,
 				});

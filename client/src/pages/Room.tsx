@@ -71,56 +71,67 @@ const Room = (props: Props) => {
 		{
 			sender: 'Fry',
 			content: 'Leela, i lov u',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Leela',
 			content: 'stop it fry',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Leela',
 			content: 'maybe im too harsh on you fry',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Amy',
 			content: 'can i have my ribs now?',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Hubert',
 			content: 'Good news everyone',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Bender',
 			content: 'hey fry, you suck',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Zoidberg',
 			content: 'Why not Zoidberg',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Hermes',
 			content: 'Sweet llamas of bahamas',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Hermes',
 			content: 'stop it you stupid crab',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Scruffy',
 			content: 'im scruffy the janitor',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
 			sender: 'Bender',
 			content: 'bite my shiny metal ass',
+			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 	];
@@ -230,25 +241,26 @@ const Room = (props: Props) => {
 			const temp: Chat = {
 				sender: me.username,
 				content: content,
+				roomId: 'myroom',
 				timestamp: Date.now()
 			}
 			setChat([...chat, temp]);
 		}
-		
 	}
+
+	useEffect(() => {
+		const logBase = document.getElementById('log-base');
+		if (logBase) {
+			console.log(`time to scroll to scroll dude`);
+			logBase.scrollIntoView();
+		}
+	})
 	
 	useEffect(() => {
-		// console.log("time to scroll");
-		// let chatContainer = document.getElementById("chat-container");
-		// if (chatContainer) {
-		// 	console.log(`scroll top: ${chatContainer.scrollTop}`);
-		// 	console.log(`scroll height: ${chatContainer.scrollHeight}`)
-		// 	chatContainer.scrollTop = chatContainer.scrollHeight;
-		// }
 		const chatBase = document.getElementById('chat-base');
 		if (chatBase) {
 			console.log(`yeah, time to scroll to this bitch`);
-			chatBase.scrollIntoView(true);
+			chatBase.scrollIntoView();
 		}
 	}, [chat]);
 

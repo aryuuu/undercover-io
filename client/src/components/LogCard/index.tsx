@@ -20,6 +20,7 @@ const LogCard = (props: Prop) => {
   return (
     <div>
       { renderLog }
+      <div id="log-base"></div>
     </div>
   );
 };

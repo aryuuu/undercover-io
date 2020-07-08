@@ -1,13 +1,19 @@
 import React, { FunctionComponent } from 'react';
 import Swal from 'sweetalert2';
+import { v4 as uuid } from 'uuid';
 
 import { Player } from '../../types';
+import { sendVote } from '../../handlers';
+import { useSocket } from '../SocketContext';
+import { usePlayer, useUpdatePlayer } from '../GameContext';
 
 interface Prop {
   player: Player[];
 }
 
 const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
+  const socket = useSocket();
+  const myPlayer = usePlayer();
   
   const colors: string[] = [
     'pastel-red',
@@ -28,9 +34,19 @@ const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
       text: `${player.isAlive ? 'Alive' : 'Dead'}`,
       showConfirmButton: player.isAlive,
       confirmButtonText: 'Vote?',
-      preConfirm: () => {
+      preConfirm: async () => {
         // send vote to server
-        return;
+        let status = await sendVote(socket, {
+          reqId: uuid(),
+          voter: myPlayer,
+          voteTarget: player
+        });
+        if (status !== 'success') {
+          Swal.fire({
+            icon: 'error',
+            text: status
+          })
+        }
       }
     })
   }
@@ -41,16 +57,18 @@ const PlayerCard: FunctionComponent<Prop> = ({ player }) => {
     return (
       <div key={`player-${item.id}`}
       style={{
-        transform: `translate(${Math.cos(fraction*index*degree)*100}px, 
-          ${Math.sin(fraction*index*degree)*100}px)`
+        transform: `translate(${Math.cos(fraction*index*degree)*120}px, 
+          ${Math.sin(fraction*index*degree)*120}px)`
       }}>
         <div className={`player fc c-container i-absolute bg-${colors[index % colors.length]}`} 
           onClick={() => showStatus(item)}
         >
-          <div className="c-item">
-            <p className={`${item.isAlive ? "alive" : "dead"} txt-fredoka`}>
-              {item.username}
-            </p>
+          <div className="fc c-item" >
+            <img 
+              className={`${item.isAlive ? 'alive': 'dead'} c-item txt-fredoka player-avatar txt-center`} 
+              src={`/img/${item.avatar}.svg`} 
+              alt={item.username}
+            />
           </div>
         </div>
       </div>

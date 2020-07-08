@@ -1,6 +1,9 @@
+// import socketio from 'socket.io';
+
 export interface Chat {
-  sender: string;
-  content: string;
+  senderId: string;
+  sender: string,
+  content: string,
   roomId: string;
   timestamp: number
 }
@@ -20,37 +23,59 @@ export interface Player {
 export interface Room {
   id: string;
   host: string;
-  player: number;
-  undercover: number;
-  mrwhite: number;
+  players: Player[];
+  playerSlot: number;
+  undercoverSlot: number;
+  mrwhiteSlot: number;
+  isPlaying: boolean;
 }
-export interface Request {
+/** server storage interfaces */
+// export interface GameClient extends Player {
+//   socket: SocketIO.Socket;
+// }
+export interface RoomClient {
+  roomId: string;
+  clients: SocketIO.Socket[];
+}
+export interface GameRoom extends Room {
+  clients: SocketIO.Socket[];
+}
+/** websocket interfaces */
+export interface Message {
+  content?: string;
+}
+export interface Request extends Message {
   reqId: string;
 }
-export interface Response {
+export interface Response extends Message {
   resId: string;
   status: string;
   message: string;
 }
 export interface CreateRoomReq extends Request {
-  userId: string;
-  username: string;
+  host: Player;
   player: number;
   undercover: number;
   mrwhite: number;
 }
 export interface JoinRoomReq extends Request {
   roomId: string;
-  userId: string;
   player: Player;
 }
+export interface StartGameReq extends Request {
+  roomId: string;
+  sender: Player;
+}
 export interface VoteReq extends Request {
-  voter: string;
-  voteTarget: string;
+  voter: Player;
+  voteTarget: Player;
 }
 export interface CreateRoomRes extends Response {
-  roomId: string;
+  room: Room;
 }
 export interface JoinRoomRes extends Response {
-  roomId: string;
+  room: Room;
+}
+export interface StartGameRes extends Response {
+  
 }

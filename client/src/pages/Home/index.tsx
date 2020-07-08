@@ -12,20 +12,22 @@ import Swal from 'sweetalert2';
 import { FcGoogle } from 'react-icons/fc';
 
 /** components */
-import Footer from '../components/Footer';
+import Footer from '../../components/Footer';
+import { useSocket } from '../../components/SocketContext';
+import { usePlayer, useRoom } from '../../components/GameContext';
 /** types */
 import { 
 	Room,
-	Player,
-	CreateRoomReq,
+	Response,
 	JoinRoomReq,
+	JoinRoomRes,
+	CreateRoomReq,
 	CreateRoomRes,
-	JoinRoomRes
-} from '../types';
+	Player as PlayerIf,
+} from '../../types';
 /**resources */
-// import { apiUrl, dummyApiUrl } from '../config'
 /** handlers */
-import { reqCreateRoom, reqJoinRoom } from '../handlers';
+import { reqCreateRoom, reqJoinRoom } from '../../handlers';
 
 interface Prop {
 
@@ -33,9 +35,10 @@ interface Prop {
 
 const Home = (props: Prop) => {
 	const history = useHistory();
-	const [username, setUsername] = useState('');
+	const socket = useSocket();
+	const myPlayer = usePlayer();
+	const myRoom = useRoom();
 	const [avatar, setAvatar] = useState(0);
-	const [socket, setSocket] = useState(null as unknown as SocketIOClient.Socket);
 
 	const dummyAvatars: string[] = [
 		'incognito', 
@@ -60,13 +63,13 @@ const Home = (props: Prop) => {
 	};
 	const submitUsername = (e: any) => {
 		e.preventDefault();
-		if (e.target.username.value.trim()) {
-			setUsername(e.target.username.value.trim());
-		}
+	}
+	const updateUsername = (name: string) => {
+		myPlayer.username = name;
 	}
 	
 	const createRoom = () => {
-		if (!username) {
+		if (!myPlayer.username) {
 			Swal.fire({
 				icon: 'error',
 				text: 'Please specify username'
@@ -104,7 +107,6 @@ const Home = (props: Prop) => {
 			},
 		]).then((result: any) => {
 			if (result.value) {
-				const answers = JSON.stringify(result.value);
 				Swal.fire({
 					title: 'Confirm',
 					html: `
@@ -114,15 +116,14 @@ const Home = (props: Prop) => {
 					`,
 					confirmButtonText: 'Create',
 					showLoaderOnConfirm: true,
-					preConfirm: async () => {
-						let status = await reqCreateRoom(socket, {
+					preConfirm: () => {
+						let status = reqCreateRoom(socket, {
 							reqId: uuid(),
-							userId: `${username}${Date.now()}`,
-							username: username,
+							host: myPlayer,
 							player: parseInt(result.value[0]),
 							undercover: parseInt(result.value[1]),
 							mrwhite: parseInt(result.value[2])
-						});
+						} as CreateRoomReq);
 						if (status !== 'success') {
 							Swal.fire({
 								icon: 'error',
@@ -137,7 +138,7 @@ const Home = (props: Prop) => {
 		
 	};
 	const joinRoom = () => {
-		if (!username) {
+		if (!myPlayer.username) {
 			Swal.fire({
 				icon: 'error',
 				text: 'Please specify username'
@@ -148,14 +149,11 @@ const Home = (props: Prop) => {
 			title: 'Join Room',
 			input: 'text',
 			confirmButtonText: 'Join',
-			preConfirm: async (value) => {
-				let status = await reqJoinRoom(socket, value, {
-					id: `${username}${Date.now()}`,
-					username: username,
-					isHost: false,
-					isAlive: true,
-					avatar: dummyAvatars[avatar],
-					score: 0
+			preConfirm: (value) => {
+				let status = reqJoinRoom(socket,{
+					reqId: uuid(),
+					roomId: value,
+					player: myPlayer
 				});
 				if (status !== 'success') {
 					Swal.fire({
@@ -170,57 +168,70 @@ const Home = (props: Prop) => {
 	
 	useEffect(() => {
 		document.title = "Home | undercover.io"
-		setSocket(io('http://localhost:3003/', { transports: ['polling', 'websocket']}));
 	}, []);
-	
-	useEffect(() => {
-		if (!socket) return;
-		
-		socket.on('new-connection-notif', (res: any) => {
-			console.log(res);
-		});
-		socket.on('create-reply', (res: CreateRoomRes) => {
-			if (res.status === 'success') {
-				
-				history.push({
-					pathname: `/room/${res.roomId}`,
-				});
-				Swal.fire({
-					title: `Server`,
-					icon: 'success',
-					text: `${res.message}`,
-					timer: 2000,
-					onBeforeOpen: () => Swal.showLoading()
-				});
 
-			} else {
-				Swal.fire({
-					icon: 'error',
-					text: `${res.message}`
-				});
-			}
-		});
-		socket.on('join-reply', (res: JoinRoomRes) => {
-			if (res.status === 'success') {
-				history.push({
-					pathname: `/room/${res.roomId}`
-				})
-				Swal.fire({
-					title: 'Please wait',
-					timer: 1000,
-					onBeforeOpen: () => Swal.showLoading()
-					// preConfirm: () => {
-					// 	history.push(`/room/${res.roomId}`)
-					// }
-				})
-			} else {
-				Swal.fire({
-					icon: 'error',
-					text: `${res.message}`
-				})
-			}
-		})
-	}, [socket]);
+	useEffect(() => {
+		myPlayer.avatar = dummyAvatars[avatar];
+	}, [avatar])
+	
+	socket.on('new-connection-notif', (res: any) => {
+		console.log(res);
+	});
+	socket.on('create-reply', (res: CreateRoomRes) => {
+		if (res.status === 'success') {
+			console.log('room created');
+			const {room : newRoom} = res;
+			myPlayer.isHost = myPlayer.id === newRoom.host;
+			myRoom.id = newRoom.id;
+			myRoom.host = newRoom.host;
+			myRoom.players = newRoom.players;
+			myRoom.playerSlot = newRoom.playerSlot;
+			myRoom.mrwhiteSlot = newRoom.mrwhiteSlot;
+			myRoom.undercoverSlot = newRoom.undercoverSlot;
+
+			history.push({
+				pathname: `/room/${res.room.id}`,
+			});
+			Swal.fire({
+				title: `Server`,
+				icon: 'success',
+				text: `${res.message}`,
+				timer: 2000,
+				onBeforeOpen: () => Swal.showLoading()
+			});
+
+		} else {
+			Swal.fire({
+				icon: 'error',
+				text: `${res.message}`
+			});
+		}
+	});
+	socket.on('join-reply', (res: JoinRoomRes) => {
+		if (res.status === 'success') {
+			const { room: newRoom } = res;
+			myRoom.id = newRoom.id;
+			myRoom.players = newRoom.players;
+			myRoom.playerSlot = newRoom.playerSlot;
+			myRoom.undercoverSlot = newRoom.undercoverSlot;
+			myRoom.mrwhiteSlot = newRoom.mrwhiteSlot;
+			myRoom.isPlaying = newRoom.isPlaying;
+
+			history.push({
+				pathname: `/room/${res.room.id}`
+			})
+			Swal.fire({
+				title: 'Please wait',
+				timer: 1000,
+				onBeforeOpen: () => Swal.showLoading()
+			})
+		} else {
+			Swal.fire({
+				icon: 'error',
+				text: `${res.message}`
+			})
+		}
+	});
 
 	return (
 		<>
@@ -244,9 +255,10 @@ const Home = (props: Prop) => {
 										id="username"
 										type="text" 
 										name="username"
+										// value={myPlayer.username}
 										placeholder="XxXPussySlayer_69XxX" 
 										className="bg-black-olive txt-white txt-center" 
-										onChange={(e) => setUsername(e.target.value)}
+										onChange={(e) => updateUsername(e.target.value)}
 									/>
 								</form>
 							</div>
@@ -263,7 +275,6 @@ const Home = (props: Prop) => {
 						</div>
 					</div>				
 				</div>
-				{/* footer */}
 				<Footer/>
 				
 			</div>

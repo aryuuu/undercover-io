@@ -36,7 +36,7 @@ body {
 	margin: 1%;
 }
 .menu-panel {
-	opacity: 0.9;
+	opacity: 90%;
 	min-width: 30%;
 	border-radius: 10px;
 	box-shadow: black;
@@ -68,7 +68,7 @@ body {
 	padding-bottom: 2%;
 	margin-top: 'auto';
 	background-color: #333333;
-	opacity: 0.9;
+	opacity: 90%;
 }
 .form-element {
 	display: flex;
@@ -86,15 +86,12 @@ body {
 .icon {
 	width: 15%;
 }
-.player-avatar {
-	width: 50px;
-	border-radius: 50%;
-}
 .avatar {
 	border-radius: 50%;
 	border-style: solid;
 	padding: 1.5%;
 	margin: 3%;
+	
 }
 .arrow {
 	max-width: 15%;
@@ -124,7 +121,7 @@ body {
 	max-width: 15%;
 	/* max-width: 30vw;
 	min-width: 25vw; */
-	opacity: 0.95;
+	opacity: 95%;
 }
 #game-table {
 	padding: 1%;
@@ -425,7 +422,7 @@ link {
 }
 
 .transparent {
-	opacity: 0.9;
+	opacity: 90%;
 }
 .v-center {
 	margin: 0;
@@ -443,10 +440,4 @@ link {
 }
 .popping:hover {
 	--scaler: 1.2;
-}
-/* .overflow-hide {
-	overflow: hidden;
-} */
-.circle {
-	border-radius: 50%;
 }

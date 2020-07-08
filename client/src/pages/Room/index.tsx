@@ -1,28 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import Swal from 'sweetalert2';
-import swal from '@sweetalert/with-react';
+import { v4 as uuid } from 'uuid';
 import { FiArrowLeft } from 'react-icons/fi';
 
 /** types */
-import { 
-	Log, 
-	Chat, 
-	Player, 
-	Room as RoomIf,
-} from '../types';
-/** resources */
-import { apiUrl, wsUrl } from '../config';
+import { Log, Chat, Player, Room as RoomIf, Response } from '../../types';
 /** handlers */
+import { sendChat, startGameReq } from '../../handlers'
 /** components */
-import Footer from '../components/Footer';
-import LogCard from '../components/LogCard';
-import VoteCard from '../components/VoteCard';
-import ChatCard from '../components/ChatCard';
-import PlayerCard from '../components/PlayerCard';
+import Footer from '../../components/Footer';
+import LogCard from '../../components/LogCard';
+import ChatCard from '../../components/ChatCard';
+import PlayerCard from '../../components/PlayerCard';
+import { usePlayer, useRoom } from '../../components/GameContext';
+import { useSocket }  from '../../components/SocketContext';
 /** images */
 
 interface MatchParams {
@@ -33,12 +29,17 @@ interface Props extends RouteComponentProps<MatchParams> {
 }
 
 const Room = (props: Props) => {
+	const history = useHistory();
 	const { match } = props;
+	const socket = useSocket();
+	const myPlayer = usePlayer();
+	const myRoom = useRoom();
+	const { roomId } = match.params;
 	
 	const dummyLog: Log[] = [
 		{
 			type: 'info',
-			content: `you just entered room ${ match.params.roomId }`,
+			content: `you just entered room ${roomId}`,
 			timestamp: Date.now()
 		},
 		{
@@ -69,66 +70,77 @@ const Room = (props: Props) => {
 	];
 	const dummyChat: Chat[] = [
 		{
+			senderId: 'fry',
 			sender: 'Fry',
 			content: 'Leela, i lov u',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'leela',
 			sender: 'Leela',
 			content: 'stop it fry',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'leela',
 			sender: 'Leela',
 			content: 'maybe im too harsh on you fry',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'amy',
 			sender: 'Amy',
 			content: 'can i have my ribs now?',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'hubert',
 			sender: 'Hubert',
 			content: 'Good news everyone',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'bender',
 			sender: 'Bender',
 			content: 'hey fry, you suck',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'zoidberg',
 			sender: 'Zoidberg',
 			content: 'Why not Zoidberg',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'hermes',
 			sender: 'Hermes',
 			content: 'Sweet llamas of bahamas',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'hermes',
 			sender: 'Hermes',
 			content: 'stop it you stupid crab',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'scruffy',
 			sender: 'Scruffy',
 			content: 'im scruffy the janitor',
 			roomId: 'myroom',
 			timestamp: Date.now()
 		},
 		{
+			senderId: 'bender',
 			sender: 'Bender',
 			content: 'bite my shiny metal ass',
 			roomId: 'myroom',
@@ -136,11 +148,12 @@ const Room = (props: Props) => {
 		},
 	];
 	const dummyPlayer: Player[] = [
+		myPlayer,
 		{
 			id: 'fry',
 			username: 'Fry',
 			score: 0,
-			avatar: 'fry-pic',
+			avatar: 'owl',
 			isHost: false,
 			isAlive: true
 		},
@@ -148,7 +161,7 @@ const Room = (props: Props) => {
 			id: 'leela',
 			username: 'Leela',
 			score: 10,
-			avatar: 'Leela-pic',
+			avatar: 'cat',
 			isHost: false,
 			isAlive: true
 		},
@@ -156,7 +169,7 @@ const Room = (props: Props) => {
 			id: 'bender',
 			username: 'Bender',
 			score: 10000,
-			avatar: 'bender-pic',
+			avatar: 'bone',
 			isHost: true,
 			isAlive: true
 		},
@@ -164,7 +177,7 @@ const Room = (props: Props) => {
 			id: 'hubert',
 			username: 'Hubert',
 			score: 20,
-			avatar: 'hubert-pic',
+			avatar: 'bug-03',
 			isHost: false,
 			isAlive: false
 		},
@@ -172,7 +185,7 @@ const Room = (props: Props) => {
 			id: 'amy',
 			username: 'Amy',
 			score: 30,
-			avatar: 'amy-pic',
+			avatar: 'pig-03',
 			isHost: false,
 			isAlive: true
 		},
@@ -180,7 +193,7 @@ const Room = (props: Props) => {
 			id: 'hermes',
 			username: 'Hermes',
 			score: 0,
-			avatar: 'hermes-pic',
+			avatar: 'bone-02',
 			isHost: false,
 			isAlive: false
 		},
@@ -188,7 +201,7 @@ const Room = (props: Props) => {
 			id: 'zoidberg',
 			username: 'Zoidberg',
 			score: 0,
-			avatar: 'zoidberg-pic',
+			avatar: 'spider-02',
 			isHost: false,
 			isAlive: false
 		},
@@ -196,25 +209,44 @@ const Room = (props: Props) => {
 			id: 'scruffy',
 			username: 'Scruffy',
 			score: 40,
-			avatar: 'fry-pic',
+			avatar: 'cat-03',
 			isHost: false,
 			isAlive: true
 		},
 	];
-	const me: Player = {
-		id: 'bender',
-		username: 'Bender',
-		isHost: true,
-		isAlive: true,
-		score: 10,
-		avatar: 'bender-pic'
-	}
 
-	const [ word, setWord ] = useState('Pisang raja');
 	const [ log, setLog ] = useState(dummyLog);
 	const [ chat, setChat ] = useState(dummyChat);
-	const [ player, setPlayer ] = useState(dummyPlayer);
+	const [ word, setWord ] = useState('Pisang raja');
+	const [ players, setPlayers ] = useState(myRoom.players);
 
+	// socket event handlers
+	socket.on('chat-broadcast', (data: Chat) => {
+		if (data.senderId === myPlayer.id) return;
+		setChat([...chat, data]);
+	});
+	socket.on('log-broadcast', (data: Log) => {
+		setLog([...log, data]);
+	});
+	socket.on('start-game-reply', (data: Response) => {
+
+	})
+	socket.on('new-word', (data: string) => {
+		Swal.fire({
+			title: 'Your word is',
+			text: data
+		})
+		setWord(data);
+	});
+	socket.on('new-player', (data: Player) => {
+		if (data.id === myPlayer.id) return;
+		setPlayers([...players, data]);
+		// myRoom.players = [...myRoom.players, data];
+	});
+	socket.on('player-left', (playerId: string) => {
+		setPlayers(players.filter(p => p.id !== playerId));
+		// myRoom.players = myRoom.players.filter(p => p.id !== playerId);
+	});
 	
 	const displayWord = () => {
 		Swal.fire({
@@ -222,50 +254,73 @@ const Room = (props: Props) => {
 			text: word
 		});
 	};
-	const displayVote = () => {
-		swal({
-			title: `Who's this unlucky bastard`,
-			text: 'vote that motherfucker',
-			content: (<VoteCard player={player}/>),
-			buttons: {
-				confirm: 'Ye',
-				cancel : 'Cancel'
+	// handle start game event
+	const startGame = () => {
+		Swal.fire({
+			title: 'Start Game',
+			preConfirm: () => {
+				let status = startGameReq(socket, {
+					reqId: uuid(),
+					roomId: roomId,
+					sender: myPlayer
+				});
+				if (status !== 'success') {
+					Swal.fire({
+						icon: 'error',
+						text: status
+					});
+				}
 			}
 		});
 	};
-	const sendChat = (e: any) => {
+	// handle chat
+	const submitChat = (e: any) => {
 		e.preventDefault();
 		const content: string = e.target.chat.value.trim();
 		e.target.chat.value = "";
 		if (content) {
 			const temp: Chat = {
-				sender: me.username,
+				senderId: myPlayer.id,
+				sender: myPlayer.username,
 				content: content,
-				roomId: 'myroom',
+				roomId: roomId,
 				timestamp: Date.now()
 			}
 			setChat([...chat, temp]);
+			sendChat(socket, temp);
 		}
 	}
 
+	// auto scroll log
 	useEffect(() => {
 		const logBase = document.getElementById('log-base');
 		if (logBase) {
-			console.log(`time to scroll to scroll dude`);
 			logBase.scrollIntoView();
 		}
-	})
+	}, [log]);
 	
+	// auto scroll chat
 	useEffect(() => {
 		const chatBase = document.getElementById('chat-base');
 		if (chatBase) {
-			console.log(`yeah, time to scroll to this bitch`);
 			chatBase.scrollIntoView();
 		}
 	}, [chat]);
 
 	useEffect(() => {
 		document.title = "Room | undercover.io"
+		if (!myPlayer.username) {
+			history.push({
+				pathname: '/'
+			})
+			Swal.fire({
+				icon: 'warning',
+				text: 'Please create your character first',
+				timer: 1000,
+				onBeforeOpen: () => Swal.showLoading()
+
+			})
+		}
 	});
 
 	return (
@@ -279,7 +334,7 @@ const Room = (props: Props) => {
 				</div>
 				<div id="room-game" className="fc c-container">
 						<div id="game-table" className="fc c-container bg-raisin-black">
-							<PlayerCard player={player}/>
+							<PlayerCard player={players}/>
 						</div>
 						<div id="game-console" className="fr c-container">
 							<div id="game-log" className="fc bg-raisin-black">
@@ -288,7 +343,7 @@ const Room = (props: Props) => {
 							<div id="game-word" className="fr bg-raisin-black c-container txt-center rounded" onClick={displayWord}>
 								<h4 className="c-item txt-white txt-fredoka">Click to check your word</h4>
 							</div>
-							<div id="game-vote" className="fr c-container bg-raisin-black rounded" onClick={displayVote} >
+							<div id="game-vote" className="fr c-container bg-raisin-black rounded" onClick={startGame} >
 								<h1 className="c-item txt-white txt-fredoka">Start</h1>
 							</div>
 						</div>
@@ -297,7 +352,7 @@ const Room = (props: Props) => {
 					<div id="chat-box" className="bg-black-olive">
 						<ChatCard chat={chat}/>
 					</div>
-					<form onSubmit={sendChat}>
+					<form onSubmit={submitChat}>
 						<input id="chat-bar" type="text" name="chat" className="bg-black-olive txt-white" placeholder="spit it out"/>
 					</form>
 				</div>

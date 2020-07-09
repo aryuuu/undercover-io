@@ -1,0 +1,26 @@
+version: '3.5'
+services: 
+  server:
+    build: 
+      context: '../..'
+      dockerfile: './docker/server/Dockerfile'
+    env_file: 
+      - '../../.env'
+    ports: 
+      - '3002:3000'
+    networks: 
+      - undercover
+    restart: always
+  client:
+    build:
+      context: '../..'
+      dockerfile: './docker/client/Dockerfile'
+    env_file: 
+      - '../../.env'
+    ports: 
+      - '3001:80'
+    networks: 
+      - undercover
+networks: 
+  undercover:
+    driver: bridge
